@@ -30,6 +30,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('ask',{slug:'bob-marley'}) }}">Ask</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('contact') }}">Send Us</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -37,6 +40,9 @@
     </nav>
 </header>
 <main role="main" class="container main">
+    <div>
+        {% include 'flash.html.twig' %}
+    </div>
     <div>
         {% block body %}{% endblock %}
     </div>
