@@ -16,6 +16,7 @@ Encore
 
     // uncomment to define the assets of the project
     .addEntry('js/app', './assets/js/app.js')
+    .addStyleEntry('css/global', './assets/css/global.scss')
     .addStyleEntry('css/app', './assets/css/app.scss')
 
     // uncomment if you use TypeScript

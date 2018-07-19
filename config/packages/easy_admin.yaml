@@ -1,0 +1,29 @@
+easy_admin:
+    site_name: 'Symfony Blog <em style="font-size: 80%;">unt1tled.</em>'
+    entities:
+        Author:
+            class: App\Entity\Author
+            label: Author
+            help: List of All Users
+        BlogPost:
+            class: App\Entity\BlogPost
+            label: Blog Post
+    list:
+        title: 'List of %%entity_label%%'
+        actions:
+            - { name: 'new', label: 'New' }
+            - { name: 'search', label: 'Search' }
+            - { name: 'edit', icon: 'pencil', label: 'Edit' }
+            - { name: 'delete', icon: 'trash-o', label: 'Delete' }
+            - { name: 'show', icon: 'info-circle', label: 'Show' }
+    edit:
+        title: 'Edit %%entity_label%%'
+        actions:
+            - { name: 'delete', icon: 'trash-o', label: 'Delete' }
+            - { name: 'list', icon: '', label: 'List' }
+    show:
+        title: 'Show %%entity_label%%'
+        actions:
+            - { name: 'delete', icon: 'trash-o', label: 'Delete' }
+            - { name: 'list', icon: '', label: 'List' }
+            - { name: 'edit', icon: 'pencil', label: 'Edit' }

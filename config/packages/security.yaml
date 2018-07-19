@@ -1,24 +1,47 @@
 security:
+    encoders:
+                App\Entity\Author: bcrypt
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
+            db_provider:
+              entity:
+                class: App\Entity\Author
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             anonymous: true
-
+            switch_user: true
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
+                remember_me_parameter: login[remember_me]
             # activate different ways to authenticate
 
             # http_basic: true
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
 
-            # form_login: true
-            # https://symfony.com/doc/current/security/form_login_setup.html
+            form_login:
+                  login_path: login
+                  check_path: login
+                  username_parameter: login[username]
+                  password_parameter: login[password]
+                  #csrf_parameter: _csrf_token
 
+            logout:
+                  path: /logout
+                  target: /
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY}
+         - { path: ^/logout, roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/admin, roles: [ROLE_MODERATOR] }
+         - { path: ^/profile, roles: ROLE_USER }
+    role_hierarchy:
+            ROLE_MODERATOR: [ROLE_USER]
+            ROLE_ADMIN: [ROLE_USER,ROLE_MODERATOR,ROLE_ALLOWED_TO_SWITCH,ROLE_PREVIOUS_ADMIN]

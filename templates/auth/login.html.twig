@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login on Our Site{% endblock %}
+
+{% block body %}
+    <div class="example-wrapper">
+        <h1>Login on Our Site ✅</h1>
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <div class="form-group row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-10">
+                    <button type="submit" id="login_up" name="login_up" class="btn btn-success btn">
+                        <i class="fa fa-lock"></i> Login
+                    </button>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
