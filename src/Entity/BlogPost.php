@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Table(name="blog_post")
@@ -25,6 +26,7 @@ class BlogPost
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Gedmo\Slug(fields={"title"}, updatable=false)
      */
     private $slug;
 
@@ -40,11 +42,13 @@ class BlogPost
 
     /**
      * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
      */
     private $updatedAt;
 
@@ -140,9 +144,9 @@ class BlogPost
         return $this;
     }
 
-    /**
+    /*
      * @ORM\PrePersist
-     */
+     *
     public function prePersist()
     {
         if (!$this->getCreatedAt()) {
@@ -156,12 +160,12 @@ class BlogPost
 
     /**
      * @ORM\PreUpdate
-     */
+     *
     public function preUpdate()
     {
         $this->setUpdatedAt(new \DateTime());
     }
-
+    /**/
     public function getAuthor(): ?Author
     {
         return $this->author;

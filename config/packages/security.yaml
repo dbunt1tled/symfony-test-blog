@@ -1,17 +1,30 @@
 security:
     encoders:
-                App\Entity\Author: bcrypt
+        #for db_provider
+        App\Entity\Author: bcrypt
+        #for in_memory
+        Symfony\Component\Security\Core\User\User: bcrypt
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
+            #our providers
+            chain_providers:
+                chain:
+                    providers: [ in_memory, db_provider ]
+            in_memory:
+                memory:
+                    users:
+                        adminlocal: { password: $2y$13$WmhdMxxLExL1AT/jJZIj6e6f2iJaG1BiNiKx4D7pGgxb6Q/2ud71S, roles: [ ROLE_ADMIN ], name: AdminLocal}
             db_provider:
-              entity:
-                class: App\Entity\Author
-                property: email
+                entity:
+                    class: App\Entity\Author
+                    property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            pattern: ^/
+            provider: chain_providers
             anonymous: true
             switch_user: true
             remember_me:
@@ -29,11 +42,15 @@ security:
                   check_path: login
                   username_parameter: login[username]
                   password_parameter: login[password]
+                  success_handler: autentificate.login.success
+                  failure_handler: autentificate.login.failure
                   #csrf_parameter: _csrf_token
 
             logout:
                   path: /logout
                   target: /
+                  invalidate_session: true
+                  delete_cookies:     ~
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:

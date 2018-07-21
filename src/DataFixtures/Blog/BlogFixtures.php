@@ -44,6 +44,7 @@ class BlogFixtures extends Fixture
             ->setGithub($this->faker->word)
             ->setTwitter($this->faker->word)
             ->setPlainPassword('12345678')
+            ->setPassword($this->passwordEncoder->encodePassword($author, $author->getPlainPassword()))
             ->setRole([Author::ROLE_USER]);
         $manager->persist($author);
         $countPosts = random_int(3,7);
@@ -51,7 +52,7 @@ class BlogFixtures extends Fixture
             $blogPost = new BlogPost();
             $title = $this->faker->unique()->sentence;
             $blogPost->setTitle($title)
-                     ->setSlug($this->faker->slug)
+                     //->setSlug($this->faker->slug)
                      ->setDescription($this->faker->text(15))
                      ->setBody($this->faker->text(100))
                      ->setAuthor($author);

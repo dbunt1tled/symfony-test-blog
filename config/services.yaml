@@ -34,3 +34,18 @@ services:
             $myparam: '%app.myparam%'
             $mailer:  '@Swift_Mailer'
             $logger: '@logger'
+
+    autentificate.login.success:
+        class: App\Services\Auth\Login\LoginSuccessHandler
+        arguments:
+            - '@security.http_utils'
+            - []
+            - '@session.flash_bag'
+    autentificate.login.failure:
+        class: App\Services\Auth\Login\LoginFailureHandler
+        arguments:
+            - '@http_kernel'
+            - '@security.http_utils'
+            - []
+            - '@logger'
+            - '@session.flash_bag'
