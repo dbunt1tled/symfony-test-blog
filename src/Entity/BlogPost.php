@@ -12,6 +12,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class BlogPost
 {
+
+    const STATUS_ACTIVE = 'active';
+    const STATUS_MODERATE = 'moderate';
+    const STATUS_DISABLE = 'disable';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -41,6 +46,11 @@ class BlogPost
     private $body;
 
     /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $status;
+
+    /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
@@ -57,6 +67,11 @@ class BlogPost
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     private $author;
+
+    public function __construct()
+    {
+        $this->status = self::STATUS_DISABLE;
+    }
 
     public function getId()
     {
@@ -111,6 +126,19 @@ class BlogPost
         return $this;
     }
 
+    public function setStatus($status): self
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;

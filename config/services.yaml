@@ -49,3 +49,19 @@ services:
             - []
             - '@logger'
             - '@session.flash_bag'
+
+    App\Repository\BlogPostRepository:
+        arguments:
+            $em: '@Doctrine\ORM\EntityManagerInterface'
+    App\Repository\AuthorRepository:
+        arguments:
+            $em: '@Doctrine\ORM\EntityManagerInterface'
+
+    App\UseCases\Blog\BlogService:
+        arguments:
+            $postRepository: '@App\Repository\BlogPostRepository'
+            $authorRepository:  '@App\Repository\AuthorRepository'
+
+    App\Services\Widgets\WPaginator\WPaginator:
+        arguments:
+            $container: '@service_container'

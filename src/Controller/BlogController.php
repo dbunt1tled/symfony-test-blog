@@ -2,25 +2,41 @@
 
 namespace App\Controller;
 
-use App\Entity\BlogPost;
+use App\UseCases\Blog\BlogService;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Stringy\StaticStringy as S;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class BlogController extends Controller
 {
+
+    /**
+     * @var BlogService
+     */
+    private $blogService;
+    private $pageSize = 10;
+    public function __construct(BlogService $blogService)
+    {
+        $this->blogService = $blogService;
+    }
+
     /**
      * @Route("/blog", name="blog")
+     * @param Request $request
+     * @return Response
+     *
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = $this->getDoctrine()->getRepository('App:BlogPost')->findAll();
-
-        return $this->render('blog/index.html.twig', [
-            'posts' => $posts,
-        ]);
+        $page = (int)$request->query->get('page',1);
+        $posts = $this->getDoctrine()->getRepository('App:BlogPost')->getAllPostPaginator(true,true,false,$page,$this->pageSize);
+        $totalItems = count($posts);
+        $pagesCount = ceil($totalItems / $this->pageSize);
+        return $this->render('blog/index.html.twig', compact('posts','totalItems','pagesCount','page'));
     }
 
     /**
@@ -32,15 +48,12 @@ class BlogController extends Controller
      */
     public function create($text)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
-        $post = new BlogPost();
-        $post->setTitle(S::safeTruncate($text,10))
-            ->setDescription(S::safeTruncate($text,25))
-            ->setBody($text)
-            ->setAuthor($user);
-        $em->persist($post);
-        $em->flush();
+        try{
+            $this->blogService->addPost(S::safeTruncate($text,10),S::safeTruncate($text,25),$text,$this->getUser());
+        }catch (\Exception $exception) {
+            $this->addFlash('danger','Something went wrong: '.$exception->getMessage());
+        }
+
         return $this->redirectToRoute('blog');
     }
 
@@ -54,19 +67,16 @@ class BlogController extends Controller
      */
     public function update($id,$text)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
-        $post = $this->getDoctrine()->getRepository('App:BlogPost')->findOneBy(['id'=> $id, 'author' => $user]);
-
+        $post = $this->blogService->findOnePost(['id'=> $id, 'author' => $this->getUser()]);
         if(!$post) {
-            $this->addFlash('danger','Something Wrong!');
+            $this->addFlash('danger','Something went wrong! Post not found.');
             return $this->redirectToRoute('blog');
         }
-        $post->setTitle(S::safeTruncate($text,10))
-             ->setDescription(S::safeTruncate($text,25))
-             ->setBody($text);
-        $em->persist($post);
-        $em->flush();
+        try{
+            $this->blogService->updatePost($post,['title'=> S::safeTruncate($text,10),'description' => S::safeTruncate($text,25),'body' => $text]);
+        }catch (\Exception $exception) {
+            $this->addFlash('danger','Something went wrong: '.$exception->getMessage());
+        }
         return $this->redirectToRoute('blog');
     }
 
@@ -79,16 +89,16 @@ class BlogController extends Controller
      */
     public function delete($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
-        $post = $this->getDoctrine()->getRepository('App:BlogPost')->findOneBy(['id'=> $id, 'author' => $user]);
-
+        $post = $this->blogService->findOnePost(['id'=> $id, 'author' => $this->getUser()]);
         if(!$post) {
-            $this->addFlash('danger','Something Wrong!');
+            $this->addFlash('danger','Something went wrong! Post not found.');
             return $this->redirectToRoute('blog');
         }
-        $em->remove($post);
-        $em->flush();
+        try{
+            $this->blogService->removePost($post);
+        }catch (\Exception $exception) {
+            $this->addFlash('danger','Something went wrong: '.$exception->getMessage());
+        }
         return $this->redirectToRoute('blog');
     }
 }
