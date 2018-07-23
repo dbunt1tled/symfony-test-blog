@@ -73,6 +73,7 @@ class BlogPostRepository extends ServiceEntityRepository
 
     /**
      * @param bool $withAuthor
+     * @param bool $withCategory
      * @param bool $addSelectAuthor
      * @param bool $active
      * @param int  $page
@@ -80,12 +81,12 @@ class BlogPostRepository extends ServiceEntityRepository
      *
      * @return Paginator
      */
-    public function getAllPostPaginator($withAuthor = false, $addSelectAuthor = true, $active = true, $page = 1, $limit = 20)
+    public function getAllPostPaginator($withAuthor = false, $withCategory = false, $addSelectAuthor = true, $active = true, $page = 1, $limit = 20)
     {
         $page = $this->getPage($page);
         $limit = $this->getLimit($limit);
         $offset = $this->getOffset($page, $limit);
-        $qb = $this->buildPostsQuery($withAuthor,$addSelectAuthor,$active);
+        $qb = $this->buildPostsQuery($withAuthor,$withCategory,$addSelectAuthor,$active);
         $paginator = new Paginator($qb, $fetchJoinCollection = true);
         $paginator->getQuery()
                   ->setFirstResult($offset)
@@ -94,6 +95,7 @@ class BlogPostRepository extends ServiceEntityRepository
     }
     /**
      * @param bool $withAuthor
+     * @param bool $withCategory
      * @param bool $active
      * @param int  $page
      * @param int  $limit
@@ -101,13 +103,13 @@ class BlogPostRepository extends ServiceEntityRepository
      *
      * @return Query|mixed|BlogPost[]
      */
-    public function findAllPosts($withAuthor = false, $active = true, $page = 1, $limit = 100,$returnQuery = false)
+    public function findAllPosts($withAuthor = false, $withCategory = false, $active = true, $page = 1, $limit = 100,$returnQuery = false)
     {
         $page = $this->getPage($page);
         $limit = $this->getLimit($limit);
         $offset = $this->getOffset($page, $limit);
 
-        $qb =  $this->buildPostsQuery($withAuthor,$active);
+        $qb =  $this->buildPostsQuery($withAuthor,$withCategory,$active);
         $qb->setMaxResults($limit)->setFirstResult($offset);
 
         if($returnQuery){
@@ -116,25 +118,29 @@ class BlogPostRepository extends ServiceEntityRepository
         return $this->returnAll($qb);
     }
 
-    public function findAllPostsCount($withAuthor = false, $active = true)
+    public function findAllPostsCount($withAuthor = false, $withCategory = false, $active = true)
     {
-        $qb =  $this->buildPostsQuery($withAuthor,false,$active);
+        $qb =  $this->buildPostsQuery($withAuthor,$withCategory,false,$active);
         $qb->select('COUNT(' . $this->alias . ')');
         return $this->returnAll($qb,Query::HYDRATE_SINGLE_SCALAR);
     }
 
     /**
      * @param bool $withAuthor
+     * @param bool $withCategory
      * @param bool $addSelectAuthor
      * @param bool $active
      *
      * @return QueryBuilder
      */
-    public function buildPostsQuery($withAuthor = false, $addSelectAuthor = true, $active = true)
+    public function buildPostsQuery($withAuthor = false, $withCategory = false, $addSelectAuthor = true, $active = true)
     {
         $qb =  $this->createQueryBuilder($this->alias);
         if($withAuthor){
             $this->joinAuthor($qb,$addSelectAuthor);
+        }
+        if($withCategory){
+            $this->joinCategory($qb,$addSelectAuthor);
         }
         if($active){
             $this->active($qb);
@@ -158,6 +164,14 @@ class BlogPostRepository extends ServiceEntityRepository
         $qb->leftJoin($this->alias.'.author','a');
         if($addSelect) {
             $qb->addSelect('a');
+        }
+        return $qb;
+    }
+    private function joinCategory(QueryBuilder $qb, $addSelect = true)
+    {
+        $qb->leftJoin($this->alias.'.category','c');
+        if($addSelect) {
+            $qb->addSelect('c');
         }
         return $qb;
     }

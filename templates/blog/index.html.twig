@@ -9,6 +9,7 @@
                 <th>Название</th>
                 <th>Описание</th>
                 <th>Автор</th>
+                <th>Категория</th>
                 <th>Создана</th>
             </tr>
         </thead>
@@ -17,6 +18,7 @@
             <td>{{ post.title }}</td>
             <td>{{ post.description }}</td>
             <td>{{ post.author }}</td>
+            <td>{{ post.category }}</td>
             <td>{{ post.createdAt.format('d m Y') }}</td>
         </tr>
     {% endfor %}

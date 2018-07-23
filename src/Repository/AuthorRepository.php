@@ -20,7 +20,7 @@ class AuthorRepository extends ServiceEntityRepository
      * @var EntityManager
      */
     private $em;
-
+    private $alias = 'ar';
     public function __construct(RegistryInterface $registry, EntityManager $em )
     {
         parent::__construct($registry, Author::class);
@@ -95,4 +95,12 @@ class AuthorRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getAllIds(): ?array
+    {
+        $result =  $this->createQueryBuilder($this->alias)
+                        ->select($this->alias.'.id')
+                        ->getQuery()
+                        ->getScalarResult();
+        return array_column($result, "id");;
+    }
 }

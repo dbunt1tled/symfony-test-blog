@@ -68,6 +68,12 @@ class BlogPost
      */
     private $author;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="blogPosts")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    private $category;
+
     public function __construct()
     {
         $this->status = self::STATUS_DISABLE;
@@ -212,5 +218,17 @@ class BlogPost
     public function __toString(): string
     {
         return $this->title;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
 }

@@ -33,7 +33,7 @@ class BlogController extends Controller
     public function index(Request $request)
     {
         $page = (int)$request->query->get('page',1);
-        $posts = $this->getDoctrine()->getRepository('App:BlogPost')->getAllPostPaginator(true,true,false,$page,$this->pageSize);
+        $posts = $this->getDoctrine()->getRepository('App:BlogPost')->getAllPostPaginator(true,true,true,false,$page,$this->pageSize);
         $totalItems = count($posts);
         $pagesCount = ceil($totalItems / $this->pageSize);
         return $this->render('blog/index.html.twig', compact('posts','totalItems','pagesCount','page'));
