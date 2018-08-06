@@ -1,0 +1,15 @@
+{{ form_start(form) }}
+    {#{ form_widget(form) }#}
+    {{ form_errors(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.slug) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.body) }}
+    {{ form_row(form.uploadedFile) }}
+    {{ form_row(form.author) }}
+    {{ form_row(form.category) }}
+    {{ form_row(form.status) }}
+    {{ form_row(form.createdAt) }}
+    {{ form_row(form.createdAtRaw) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

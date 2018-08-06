@@ -1,0 +1,35 @@
+{% extends 'admin-base.html.twig' %}
+
+{% block title %}Edit Category{% endblock %}
+
+{% block body %}
+    <h1>Edit Category</h1>
+
+    {{ include('admin/category/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('admin_category_index') }}">back to list</a>
+
+    {{ include('admin/category/_delete_form.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('#category_createdAtRaw').datepicker({
+            format: 'dd MM yyyy',
+            language: 'current',
+            weekStart: 1,
+            autoclose: true
+        }).on('changeDate', function(ev){
+            var date = $('#category_createdAtRaw').datepicker("getDate");
+            $('#category_createdAt').val(new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString());
+        });
+        $('.summernote').summernote({
+            height: 300,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null,             // set maximum height of editor
+            focus: true,
+        });
+        $('select').select2();
+    </script>
+
+{% endblock %}

@@ -18,6 +18,7 @@ use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 class CategoryRepository extends NestedTreeRepository/*ServiceEntityRepository /**/
 {
     private $alias = 'ct';
+
     /*
     public function __construct(RegistryInterface $registry)
     {

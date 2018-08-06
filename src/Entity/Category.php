@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Gedmo\Tree(type="nested")
@@ -102,6 +103,17 @@ class Category
      * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="category")
      */
     private $blogPosts;
+    /**
+     * @ORM\Column(type="string", length=255, options={"default":""})
+     * @Assert\File(
+     *     maxSize = "5M",
+     *     mimeTypes = {"image/jpeg", "image/gif", "image/png", "image/tiff"},
+     *     maxSizeMessage = "Максимальный размер файла 5MB.",
+     *     mimeTypesMessage = "Загружать можно только изображения."
+     * )
+     *
+     */
+    private $image;
 
     public function __construct()
     {
@@ -283,5 +295,46 @@ class Category
         }
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param $image
+     *
+     * @return Category
+     */
+    public function setImage($image): self
+    {
+        if(is_null($image)) {
+            return $this;
+        }
+        if($image === '') {
+            $image = null;
+        }
+        $this->image = $image;
+        return $this;
+    }
+    public function deleteImage(): self
+    {
+        $this->setImage('');
+        return $this;
+    }
+    public static function getStatuses()
+    {
+        return [
+            'Disable' => Category::STATUS_DISABLE,
+            'Active' => Category::STATUS_ACTIVE,
+        ];
+    }
+    public static function getDefaultStatus()
+    {
+        return Category::STATUS_DISABLE;
     }
 }

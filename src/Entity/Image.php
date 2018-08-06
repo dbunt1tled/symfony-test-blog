@@ -112,10 +112,10 @@ class Image
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function preUpload(  )
+    public function preUpload()
     {
         if (null !== $this->file) {
-            $filename = $this->slug($this->getTitle());
+            $filename = $this->slug($this->getTitle().'_'.bin2hex(random_bytes(2)));
             $this->path = $filename . '.' . $this->file->guessExtension();
         }
     }
@@ -159,13 +159,19 @@ class Image
         // Clean up the file property as you won't need it anymore
         $this->file = null;
     }
-    private function slug($str) {
-        $rus=array('А','Б','В','Г','Д','Е','Ё','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я','а','б','в','г','д','е','ё','ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я',' ');
-        $lat=array('a','b','v','g','d','e','e','gh','z','i','y','k','l','m','n','o','p','r','s','t','u','f','h','c','ch','sh','sch','y','y','y','e','yu','ya','a','b','v','g','d','e','e','gh','z','i','y','k','l','m','n','o','p','r','s','t','u','f','h','c','ch','sh','sch','y','y','y','e','yu','ya',' ');
-        $str = str_replace($rus, $lat, $str); // перевеодим на английский
-        $str = str_replace('-', '', $str); // удаляем все исходные "-"
-        $str = preg_replace('/[^A-Za-z0-9-]+/', '-', $str); // заменяет все символы и пробелы на "-"
-        return $str;
+    private function slug($slug) {
+        $slug = transliterator_transliterate(
+            'Any-Latin; Latin-ASCII; [:Nonspacing Mark:] Remove; [:Punctuation:] Remove; Lower();',
+            $slug
+        );
+
+        if (false == $slug) {
+            throw new \RuntimeException('Unable to sluggize: ' . $name);
+        }
+
+        $slug = preg_replace('/\W/', ' ', $slug); //remove remaining nonword characters
+        $slug = preg_replace('/[-\s]+/', '-', $slug);
+        return $slug;
     }
 
     public function getBlogPost(): ?BlogPost
@@ -195,7 +201,7 @@ class Image
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        return __DIR__.'/../../../../public/'.$this->getUploadDir();
+        return __DIR__.'/../../public/'.$this->getUploadDir();
     }
     protected function getUploadDir()
     {

@@ -1,0 +1,17 @@
+@import "~codemirror/lib/codemirror.css";
+@import "~summernote/dist/summernote-bs4.css";
+@import "~select2/dist/css/select2.css";
+main{
+  color: #565656;
+}
+.imgWrap,.imgDelWrap{
+  display: inline-block;
+}
+.imgWrap{
+  position: relative;
+}
+.imgDelWrap{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}

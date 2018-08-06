@@ -1,0 +1,36 @@
+{% extends 'admin-base.html.twig' %}
+
+{% block title %}Edit BlogPost{% endblock %}
+
+{% block body %}
+    <h1>Edit BlogPost</h1>
+
+    {{ include('admin/blog_post/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('admin_blog_post_index') }}">back to list</a>
+
+    {{ include('admin/blog_post/_delete_form.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        //$('#blog_post_images').attr('name',$('#blog_post_images').attr('name')+'[]');
+        $('#blog_post_createdAtRaw').datepicker({
+            format: 'dd MM yyyy',
+            language: 'current',
+            weekStart: 1,
+            autoclose: true
+        }).on('changeDate', function(ev){
+            var date = $('#blog_post_createdAtRaw').datepicker("getDate");
+            $('#blog_post_createdAt').val(new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString());
+        });
+        $('.summernote').summernote({
+            height: 300,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null,             // set maximum height of editor
+            focus: true,
+        });
+        $('select').select2();
+    </script>
+
+{% endblock %}

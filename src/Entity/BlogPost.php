@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="blog_post")
@@ -77,9 +78,19 @@ class BlogPost
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="blogPost")
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="blogPost", cascade={"persist"})
      */
     private $images;
+
+    /**
+     * @Assert\File(
+     *     maxSize = "5M",
+     *     mimeTypes = {"image/jpeg", "image/gif", "image/png", "image/tiff"},
+     *     maxSizeMessage = "Максимальный размер файла 5MB.",
+     *     mimeTypesMessage = "Загружать можно только изображения."
+     * )
+     */
+    private $uploadedFile;
 
     public function __construct()
     {
@@ -248,10 +259,37 @@ class BlogPost
         return $this->images;
     }
 
+
+    public function setImages($images): self
+    {
+        if(empty($images)) {
+            $this->images = new ArrayCollection();
+        }else {
+            foreach ($images as $image) {
+                $this->addImage($image);
+            }
+        }
+        return $this;
+    }
+
+    public function getUploadedFile()
+    {
+        return $this->uploadedFile;
+    }
+
+
+    public function setUploadedFile($uploadedFile): self
+    {
+        $this->uploadedFile = $uploadedFile;
+        return $this;
+    }
+
+
+
     public function addImage(Image $image): self
     {
         if (!$this->images->contains($image)) {
-            $this->images[] = $image;
+            $this->images->add($image);
             $image->setBlogPost($this);
         }
 
@@ -269,5 +307,17 @@ class BlogPost
         }
 
         return $this;
+    }
+    public static function getStatuses()
+    {
+        return [
+            'Disable' => BlogPost::STATUS_DISABLE,
+            'Moderate' => BlogPost::STATUS_MODERATE,
+            'Active' => BlogPost::STATUS_ACTIVE,
+        ];
+    }
+    public static function getDefaultStatus()
+    {
+        return BlogPost::STATUS_DISABLE;
     }
 }

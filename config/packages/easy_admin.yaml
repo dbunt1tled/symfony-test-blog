@@ -8,6 +8,9 @@ easy_admin:
         BlogPost:
             class: App\Entity\BlogPost
             label: Blog Post
+        Category:
+            class: App\Entity\Category
+            label: Category
     list:
         title: 'List of %%entity_label%%'
         actions:

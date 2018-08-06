@@ -6,10 +6,10 @@
     <title>{% block title %}Welcome to Admin!{% endblock %}</title>
     <meta name="description" content="{% block description %}Welcome!{% endblock %}">
     <meta name="author" content="{% block author %}by unt1tled{% endblock %}">
+    <link rel="stylesheet" href="{{ asset('build/css/admin.css') }}" >
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="{{ asset('build/css/global.css') }}" >
-
-    <link rel="stylesheet" href="{{ asset('build/css/app.css') }}" >
+    <link rel="stylesheet" href="{{ asset('build/css/globalAdmin.css') }}" >
+    <link rel="stylesheet" href="{{ asset('build/css/globalAddAdmin.css') }}" >
     {% block stylesheets %}{% endblock %}
 </head>
 
@@ -71,7 +71,7 @@
         {% block body %}{% endblock %}
     </div>
 </main>
-<script src="{{ asset('build/js/app.js') }}"></script>
+<script src="{{ asset('build/js/admin.js') }}"></script>
 {% block javascripts %}{% endblock %}
 </body>
 </html>

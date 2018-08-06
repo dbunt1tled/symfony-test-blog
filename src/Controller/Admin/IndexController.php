@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class IndexController  extends AbstractController
 {
     /**
-     * @Route("/admin1", name="admin1")
+     * @Route("/administrator", name="administrator")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function index()
