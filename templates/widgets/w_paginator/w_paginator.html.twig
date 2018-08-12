@@ -2,20 +2,19 @@
     <nav aria-label="Paginate posts">
         <ul class="pagination">
             {% if page > 1 %}
-                <li class="page-item"><a class="page-link" href="{{ path('blog',{page:(page-1)})}}"><i class="fa fa-arrow-left"></i></a></li>
+                <li class="page-item"><a class="page-link" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({page:(page-1)}))}}"><i class="fa fa-arrow-left"></i></a></li>
             {% endif %}
             {% for i in (page-anchors)..(page+anchors) %}
-
                 {% if i > 0 and i < (pagesCount+1) %}
                     {% if page == i %}
-                        <li class="page-item active"><a class="page-link" href="{{ path('blog',{page:i})}}">{{ i }}</a></li>
+                        <li class="page-item active"><a class="page-link" href="{{ path(app.request.attributes.get('_route'),app.request.query.all|merge({page:i}))}}">{{ i }}</a></li>
                     {% else %}
-                        <li class="page-item"><a class="page-link" href="{{ path('blog',{page:i})}}">{{ i }}</a></li>
+                        <li class="page-item"><a class="page-link" href="{{ path(app.request.attributes.get('_route'),app.request.query.all|merge({page:i}))}}">{{ i }}</a></li>
                     {% endif %}
                 {% endif %}
             {% endfor %}
             {% if page < pagesCount %}
-                <li class="page-item"><a class="page-link" href="{{ path('blog',{page:(page-1)})}}"><i class="fa fa-arrow-right"></i></a></li>
+                <li class="page-item"><a class="page-link" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({page:(page+1)}))}}"><i class="fa fa-arrow-right"></i></a></li>
             {% endif %}
         </ul>
     </nav>

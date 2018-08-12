@@ -1,53 +1,53 @@
 {% extends 'admin-base.html.twig' %}
 
-{% block title %}Category index{% endblock %}
+{% block title %}Categories list {% endblock %}
 
 {% block body %}
-    <h1>Category index</h1>
+    <h1>Categories list</h1>
+    <div class="row mt-5 mb-3">
+        <div class="col-xs-12">
+            <a class="btn btn-success" href="{{ path('admin_category_new') }}">Create new</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Description</th>
+                        <th>Parent</th>
+                        <th>CreatedAt</th>
+                        <th>Status</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td>{{ category.id }}</td>
+                        <td>{{ category.name }}</td>
+                        <td class="text-center">{% if category.image %}<img src="{{ asset('images/categories/' ~ category.image.filename) }}" class="img-thumbnail w-50">{% endif %}</td>
+                        <td>{{ category.description|length > 50 ? category.description|slice(0, 51)|split(' ')|slice(0, -1)|join(' ') ~ '…' : category.description }}</td>
+                        <td>{{ category.parent ? category.parent.name : '' }}</td>
+                        <td>{{ category.createdAt ? category.createdAt|date('d F Y') : '' }}</td>
+                        <td>{{ category.status }}</td>
+                        <td>
+                            {#<a href="{{ path('admin_category_show', {'id': category.id}) }}">show</a>#}
+                            <a class="btn btn-primary" href="{{ path('admin_category_edit', {'id': category.id}) }}"><i class="fa fa-edit"></i></a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {{ wPaginator(categories, totalItems, pagesCount, page) }}
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Slug</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>UpdatedAt</th>
-                <th>CreatedAt</th>
-                <th>Lft</th>
-                <th>Lvl</th>
-                <th>Rgt</th>
-                <th>Image</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for category in categories %}
-            <tr>
-                <td>{{ category.id }}</td>
-                <td>{{ category.name }}</td>
-                <td>{{ category.slug }}</td>
-                <td>{{ category.description }}</td>
-                <td>{{ category.status }}</td>
-                <td>{{ category.updatedAt ? category.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ category.createdAt ? category.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ category.lft }}</td>
-                <td>{{ category.lvl }}</td>
-                <td>{{ category.rgt }}</td>
-                <td>{{ category.image }}</td>
-                <td>
-                    <a href="{{ path('admin_category_show', {'id': category.id}) }}">show</a>
-                    <a href="{{ path('admin_category_edit', {'id': category.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="12">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('admin_category_new') }}">Create new</a>
 {% endblock %}

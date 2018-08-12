@@ -8,6 +8,7 @@ parameters:
     app.myparam: 'myString'
     blog_posts_files_directory: '%kernel.project_dir%/public/images/posts'
     categories_files_directory: '%kernel.project_dir%/public/images/categories'
+    paginator_page_size: 20
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -52,36 +53,28 @@ services:
             - '@logger'
             - '@session.flash_bag'
 
-    App\Repository\BlogPostRepository:
-        arguments:
-            $em: '@Doctrine\ORM\EntityManagerInterface'
-    #App\Repository\CategoryRepository:
-    #    factory: 'Doctrine\ORM\EntityManagerInterface:getRepository'
-    #arguments:
-    #    $em: '@Doctrine\ORM\EntityManagerInterface'
-    #    $class: '@App\Entity\Category'
-
-    App\Repository\AuthorRepository:
-        arguments:
-            $em: '@Doctrine\ORM\EntityManagerInterface'
+#    App\Repository\CategoryRepository:
+#        arguments:
+#            - '@Symfony\Bridge\Doctrine\RegistryInterface'
 
     App\UseCases\Blog\BlogService:
         arguments:
-            $postRepository: '@App\Repository\BlogPostRepository'
-            $authorRepository:  '@App\Repository\AuthorRepository'
+            $em: '@doctrine.orm.entity_manager'
+            #$postRepository: '@App\Repository\BlogPostRepository'
+            #$authorRepository:  '@App\Repository\AuthorRepository'
+            #$imageRepository: '@App\Repository\ImageRepository'
+            #$categoryRepository: '@App\Repository\CategoryRepository'
 
     App\Services\Widgets\WPaginator\WPaginator:
         arguments:
             $container: '@service_container'
 
-    App\Utils\FileUploader:
-        arguments:
-            $targetDirectory: '%categories_files_directory%'
-    App\Utils\BlogImageUploader:
-        arguments:
-            $targetDirectory: '%blog_posts_files_directory%'
-    App\EventListener\ImageUploadListener:
-        tags:
-        - { name: doctrine.event_listener, event: prePersist }
-        - { name: doctrine.event_listener, event: preUpdate }
-        - { name: doctrine.event_listener, event: postLoad }
+#    App\EventListener\ImageUploadListener:
+#        tags:
+#        - { name: doctrine.event_listener, event: prePersist }
+#        - { name: doctrine.event_listener, event: preUpdate }
+#        - { name: doctrine.event_listener, event: postLoad }
+
+#   App\Repository\AuthorRepository:
+#       arguments:
+#           $em: '@Doctrine\ORM\EntityManagerInterface'

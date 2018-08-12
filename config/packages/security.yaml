@@ -58,6 +58,7 @@ security:
          - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY}
          - { path: ^/logout, roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/admin, roles: [ROLE_MODERATOR] }
+         - { path: ^/administrator, roles: [ROLE_MODERATOR] }
          - { path: ^/profile, roles: ROLE_USER }
     role_hierarchy:
             ROLE_MODERATOR: [ROLE_USER]

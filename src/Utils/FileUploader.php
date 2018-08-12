@@ -12,15 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader
 {
-    /**
-     * @var string
-     */
-    private $targetDirectory;
 
-    public function __construct($targetDirectory)
-    {
-        $this->targetDirectory = $targetDirectory;
-    }
     public function upload(UploadedFile $file,string $nameForFile = '')
     {
         if(empty($nameForFile)){
@@ -38,9 +30,10 @@ class FileUploader
      */
     public function getTargetDirectory()
     {
-        return $this->targetDirectory;
+        return Globals::getCategoryImagesDir();
     }
     private function slug($slug) {
+        $name = $slug;
         $slug = transliterator_transliterate(
             'Any-Latin; Latin-ASCII; [:Nonspacing Mark:] Remove; [:Punctuation:] Remove; Lower();',
             $slug

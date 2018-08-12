@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Utils\Globals;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
@@ -57,5 +58,22 @@ class Kernel extends BaseKernel
         $routes->import($confDir.'/{routes}/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
+    }
+    public function boot()
+    {
+        if (true === $this->booted) {
+            return;
+        }
+        parent::boot();
+        $container = $this->getContainer();
+        if ($container->hasParameter('categories_files_directory')) {
+                Globals::setCategoryImagesDir($container->getParameter('categories_files_directory'));
+        }
+        if ($container->hasParameter('blog_posts_files_directory')) {
+            Globals::setBlogImagesDir($container->getParameter('blog_posts_files_directory'));
+        }
+        if ($container->hasParameter('paginator_page_size')) {
+            Globals::setPaginatorPageSize($container->getParameter('paginator_page_size'));
+        }
     }
 }

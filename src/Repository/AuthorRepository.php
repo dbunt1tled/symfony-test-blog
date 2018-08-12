@@ -3,9 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Author;
+use App\Utils\PagerTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Inflector\Inflector;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -16,15 +19,12 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class AuthorRepository extends ServiceEntityRepository
 {
-    /**
-     * @var EntityManager
-     */
-    private $em;
+    use PagerTrait;
+
     private $alias = 'ar';
-    public function __construct(RegistryInterface $registry, EntityManager $em )
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Author::class);
-        $this->em = $em;
     }
 
     /**
@@ -32,10 +32,10 @@ class AuthorRepository extends ServiceEntityRepository
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    public function add(Author $author)
+    public function save(Author $author)
     {
-        $this->em->persist($author);
-        $this->em->flush();
+        $this->_em->persist($author);
+        $this->_em->flush();
     }
 
     /**
@@ -53,8 +53,8 @@ class AuthorRepository extends ServiceEntityRepository
                 $author->{'set'.ucfirst($key)}($value); // ucfirst() is not required but I think it's cleaner
             }
         }
-        $this->em->persist($author);
-        $this->em->flush();
+        $this->_em->persist($author);
+        $this->_em->flush();
     }
     /**
      * @param Author $author
@@ -63,8 +63,8 @@ class AuthorRepository extends ServiceEntityRepository
      */
     public function remove(Author $author)
     {
-        $this->em->remove($author);
-        $this->em->flush();
+        $this->_em->remove($author);
+        $this->_em->flush();
     }
 
 //    /**
@@ -103,4 +103,48 @@ class AuthorRepository extends ServiceEntityRepository
                         ->getScalarResult();
         return array_column($result, "id");;
     }
+    public function getAllAuthorPaginator($page = 1, $limit = 20)
+    {
+        $page = $this->getPage($page);
+        $limit = $this->getLimit($limit);
+        $offset = $this->getOffset($page, $limit);
+        $qb = $this->buildCategoryQuery();
+        $paginator = new Paginator($qb, $fetchJoinCollection = true);
+        $paginator->getQuery()
+                  ->setFirstResult($offset)
+                  ->setMaxResults($limit);
+        return  $paginator;
+    }
+
+    public function buildCategoryQuery()
+    {
+        $qb =  $this->createQueryBuilder($this->alias);
+        /*if($withParent) {
+            $this->joinParent($qb, $addSelect);
+        }
+        if($active){
+            $this->active($qb);
+        }/**/
+        return $qb;
+    }
+
+    private function returnAll(QueryBuilder $qb, $hydrationMode = Query::HYDRATE_OBJECT)
+    {
+        return  $qb->getQuery()->getResult($hydrationMode);
+    }
+    /*
+    private function active(QueryBuilder $qb)
+    {
+        return $qb->andWhere($this->alias.'.status = :activeStatus')
+                  ->setParameter('activeStatus', Category::STATUS_ACTIVE);
+    }
+    private function joinParent(QueryBuilder $qb, $addSelect = true)
+    {
+        $qb->leftJoin($this->alias.'.parent','pc');
+        if($addSelect) {
+            $qb->addSelect('pc');
+        }
+        return $qb;
+    }
+    /**/
 }

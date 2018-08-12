@@ -1,0 +1,14 @@
+{{ form_start(form) }}
+    {# form_widget(form) #}
+    {{ form_errors(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.phone) }}
+    {{ form_row(form.shortBio) }}
+    {{ form_row(form.twitter) }}
+    {{ form_row(form.github) }}
+    {{ form_row(form.plainPassword) }}
+    {{ form_row(form.role) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

@@ -41,6 +41,7 @@ class FilesUploader
         return $this->targetDirectory;
     }
     private function slug($slug) {
+        $name = $slug;
         $slug = transliterator_transliterate(
             'Any-Latin; Latin-ASCII; [:Nonspacing Mark:] Remove; [:Punctuation:] Remove; Lower();',
             $slug

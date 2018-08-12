@@ -6,7 +6,6 @@ use App\Entity\BlogPost;
 use App\Utils\PagerTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Inflector\Inflector;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -22,12 +21,10 @@ class BlogPostRepository extends ServiceEntityRepository
 {
     use PagerTrait;
 
-    protected $em;
     private $alias = 'bp';
 
-    public function __construct(RegistryInterface $registry,EntityManager $em)
+    public function __construct(RegistryInterface $registry)
     {
-        $this->em = $em;
         parent::__construct($registry, BlogPost::class);
     }
 
@@ -36,10 +33,10 @@ class BlogPostRepository extends ServiceEntityRepository
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    public function add(BlogPost $post)
+    public function save(BlogPost $post)
     {
-        $this->em->persist($post);
-        $this->em->flush();
+        $this->_em->persist($post);
+        $this->_em->flush();
     }
 
     /**
@@ -57,8 +54,8 @@ class BlogPostRepository extends ServiceEntityRepository
                 $post->{'set'.ucfirst($key)}($value);
             }
         }
-        $this->em->persist($post);
-        $this->em->flush();
+        $this->_em->persist($post);
+        $this->_em->flush();
     }
     /**
      * @param BlogPost $post
@@ -67,8 +64,8 @@ class BlogPostRepository extends ServiceEntityRepository
      */
     public function remove(BlogPost $post)
     {
-        $this->em->remove($post);
-        $this->em->flush();
+        $this->_em->remove($post);
+        $this->_em->flush();
     }
 
     /**

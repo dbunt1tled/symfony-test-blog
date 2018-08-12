@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin-base.html.twig' %}
 
 {% block title %}New Category{% endblock %}
 
@@ -8,4 +8,26 @@
     {{ include('admin/category/_form.html.twig') }}
 
     <a href="{{ path('admin_category_index') }}">back to list</a>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('#category_createdAtRaw').datepicker({
+            format: 'dd MM yyyy',
+            language: 'current',
+            weekStart: 1,
+            autoclose: true
+        }).on('changeDate', function(ev){
+            var date = $('#category_createdAtRaw').datepicker("getDate");
+            $('#category_createdAt').val(new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString());
+        });
+        $('.summernote').summernote({
+            height: 300,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null,             // set maximum height of editor
+            focus: true,
+        });
+        $('select').select2();
+    </script>
+
 {% endblock %}

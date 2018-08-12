@@ -1,47 +1,58 @@
 {% extends 'admin-base.html.twig' %}
 
-{% block title %}BlogPost index{% endblock %}
+{% block title %}BlogPost list{% endblock %}
 
 {% block body %}
-    <h1>BlogPost index</h1>
+    <h1>BlogPost's list</h1>
+    <div class="row mt-5 mb-3">
+        <div class="col-xs-12">
+            <a class="btn btn-success" href="{{ path('admin_blog_post_new') }}">Create new</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Slug</th>
+                        <th>Description</th>
+                        <th>Body</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>CreatedAt</th>
+                        <th>Status</th>
+                        <th>actions</th>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Slug</th>
-                <th>Description</th>
-                <th>Body</th>
-                <th>Status</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for blog_post in blog_posts %}
-            <tr>
-                <td>{{ blog_post.id }}</td>
-                <td>{{ blog_post.title }}</td>
-                <td>{{ blog_post.slug }}</td>
-                <td>{{ blog_post.description }}</td>
-                <td>{{ blog_post.body }}</td>
-                <td>{{ blog_post.status }}</td>
-                <td>{{ blog_post.createdAt ? blog_post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ blog_post.updatedAt ? blog_post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('admin_blog_post_show', {'id': blog_post.id}) }}">show</a>
-                    <a href="{{ path('admin_blog_post_edit', {'id': blog_post.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for blog_post in posts %}
+                    <tr>
+                        <td>{{ blog_post.id }}</td>
+                        <td>{{ blog_post.title }}</td>
+                        <td>{{ blog_post.slug }}</td>
+                        <td>{{ blog_post.description[:30] ~ (blog_post.description|length > 30 ? '...') }}</td>
+                        <td>{{ blog_post.body|length > 50 ? blog_post.body|slice(0, 51)|split(' ')|slice(0, -1)|join(' ') ~ '…' : blog_post.body }}</td>
+                        <td>{{ blog_post.author ? blog_post.author.name : '' }}</td>
+                        <td>{{ blog_post.category ? blog_post.category.name : '' }}</td>
+                        <td>{{ blog_post.createdAt ? blog_post.updatedAt|date('d F Y') : '' }}</td>
+                        <td>{{ blog_post.status }}</td>
+                        <td>
+                            {#<a href="{{ path('admin_blog_post_show', {'id': blog_post.id}) }}">show</a>#}
+                            <a class="btn btn-primary" href="{{ path('admin_blog_post_edit', {'id': blog_post.id}) }}"><i class="fa fa-edit"></i></a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="10">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {{ wPaginator(posts, totalItems, pagesCount, page) }}
+    </div>
 
-    <a href="{{ path('admin_blog_post_new') }}">Create new</a>
 {% endblock %}

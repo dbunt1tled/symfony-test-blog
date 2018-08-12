@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Image;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Common\Inflector\Inflector;
 
 /**
  * @method Image|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,7 +20,49 @@ class ImageRepository extends ServiceEntityRepository
         parent::__construct($registry, Image::class);
     }
 
-//    /**
+    /**
+     * @param Image $image
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function save(Image $image)
+    {
+        $this->_em->persist($image);
+        $this->_em->flush();
+    }
+
+    /**
+     * @param Image $image
+     * @param array $data
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function update(Image $image,array $data)
+    {
+        foreach ($data as $key => $value){
+            $key = Inflector::camelize($key);
+            if (property_exists($image, $key)) {
+                $image->{'set'.ucfirst($key)}($value);
+            }
+        }
+        $this->_em->persist($image);
+        $this->_em->flush();
+    }
+    /**
+     * @param Image $image
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function remove(Image $image)
+    {
+        $this->_em->remove($image);
+        $this->_em->flush();
+    }
+
+
+
+    //    /**
 //     * @return Image[] Returns an array of Image objects
 //     */
     /*

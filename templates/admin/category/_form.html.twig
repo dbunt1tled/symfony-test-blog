@@ -7,15 +7,15 @@
     {% if category.image is not empty %}
         <div class="text-center">
             <div class="imgWrap">
-                <img src="{{ asset('images/categories/' ~ category.image.filename) }}" class="img-fluid img-thumbnail">
+                    <img src="{{ asset('images/categories/' ~ category.image.filename) }}" class="img-fluid img-thumbnail">
                 <div class="imgDelWrap">
                     {{ include('admin/category/_delete_image_form.html.twig') }}
                 </div>
             </div>
         </div>
     {% endif %}
-    {{ form_row(form.status) }}
     {{ form_row(form.image) }}
+    {{ form_row(form.status) }}
     {{ form_row(form.parent) }}
     {{ form_row(form.createdAt) }}
     {{ form_row(form.createdAtRaw) }}

@@ -55,8 +55,9 @@ class BlogPostType extends AbstractType
                 'data_class' => null
             ])/**/
             ->add('uploadedFile', FileType::class, [
-                'label' => 'Photo (Image file)',
+                'label' => 'Add Photo (Image file)',
                 'data_class' => null,
+                'required' => false,
             ])/**/
             ->add('author')
             ->add('category')

@@ -2,17 +2,19 @@
 
 namespace App\Entity;
 
+use App\Utils\Globals;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="category")
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
- *
+ * @ORM\HasLifecycleCallbacks()
  */
 class Category
 {
@@ -323,8 +325,42 @@ class Category
     }
     public function deleteImage(): self
     {
+        /**
+         * @var File $file
+         */
+        $file = $this->getImage();
+        unlink($file->getRealPath());
         $this->setImage('');
         return $this;
+    }
+
+    /**
+     * @ORM\PostLoad()
+     */
+    public function postLoad()
+    {
+        if ($fileName = $this->getImage()) {
+            $this->setImage(new File($this->getTargetDirectory().'/'.$fileName));
+        }
+    }
+
+    /**
+     * @ORM\PreFlush()
+     * @ORM\PreUpdate()
+     */
+    public function preSave()
+    {
+        $fileName = $this->getImage();
+        if ($fileName instanceof File) {
+            $this->setImage($fileName->getFilename());
+        }
+    }
+    /**
+     * @return mixed
+     */
+    public function getTargetDirectory()
+    {
+        return Globals::getCategoryImagesDir();
     }
     public static function getStatuses()
     {

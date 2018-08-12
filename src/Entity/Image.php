@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Utils\Globals;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -53,6 +54,10 @@ class Image
      */
     private $blogPost;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $blog_post_id;
     public function getId()
     {
         return $this->id;
@@ -116,7 +121,7 @@ class Image
     {
         if (null !== $this->file) {
             $filename = $this->slug($this->getTitle().'_'.bin2hex(random_bytes(2)));
-            $this->path = $filename . '.' . $this->file->guessExtension();
+            $this->path = $this->imageGroupDir().'/'.$filename . '.' . $this->file->guessExtension();
         }
     }
     /**
@@ -148,8 +153,13 @@ class Image
 
         // move takes the target directory and then the
         // target filename to move to
+
+        if(!is_dir($this->getTargetDirectory().'/'.$this->imageGroupDir())) {
+            mkdir($this->getTargetDirectory().'/'.$this->imageGroupDir(),0777);
+            chmod($this->getTargetDirectory().'/'.$this->imageGroupDir(),0777);
+        }
         $this->file->move(
-            $this->getUploadRootDir(),
+            $this->getTargetDirectory().'/'.$this->imageGroupDir(),
             $this->path
         );
 
@@ -189,7 +199,7 @@ class Image
     {
         return null === $this->path
             ? null
-            : $this->getUploadRootDir().'/'.$this->path;
+            : $this->getTargetDirectory().'/'.$this->path;
     }
     public function getWebPath()
     {
@@ -197,16 +207,37 @@ class Image
             ? null
             : $this->getUploadDir().'/'.$this->path;
     }
-    protected function getUploadRootDir()
+    protected function getTargetDirectory()
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        return __DIR__.'/../../public/'.$this->getUploadDir();
+        //return __DIR__.'/../../public/'.$this->getUploadDir();
+        return Globals::getBlogImagesDir();
     }
     protected function getUploadDir()
     {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
         return 'images/posts';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBlogPostId()
+    {
+        return $this->blog_post_id;
+    }
+
+    /**
+     * @param mixed $blog_post_id
+     */
+    public function setBlogPostId($blog_post_id): void
+    {
+        $this->blog_post_id = $blog_post_id;
+    }
+    public function imageGroupDir()
+    {
+        return date('Y-m-d');
     }
 }

@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -19,7 +20,9 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('slug')
+            ->add('slug',TextType::class,[
+                'required' => false,
+            ])
             ->add('description',TextareaType::class,[
                 'attr' => ['class' => 'summernote']
             ])
@@ -35,6 +38,7 @@ class CategoryType extends AbstractType
             ])
             ->add('createdAt',HiddenDateTimeType::class, [
                 'attr' => [],
+                'empty_data' => date('Y-m-d'),
             ])
             ->add('parent')
         ;
@@ -44,7 +48,7 @@ class CategoryType extends AbstractType
 
             $form->add('createdAtRaw',null,[
                 'mapped'=>false,
-                'data' => $category->getcreatedAt()->format('d F Y'),
+                'data' => (!empty($category->getcreatedAt()))?$category->getcreatedAt()->format('d F Y'):date('d F Y'),
                 'attr' => [],
                 'label' => 'Created At',
             ]);

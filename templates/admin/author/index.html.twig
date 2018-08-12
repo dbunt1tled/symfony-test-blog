@@ -1,0 +1,52 @@
+{% extends 'admin-base.html.twig' %}
+
+{% block title %}Authors list{% endblock %}
+
+{% block body %}
+    <h1>Authors list</h1>
+    <div class="row mt-5 mb-3">
+        <div class="col-xs-12">
+            <a class="btn btn-success" href="{{ path('admin_category_new') }}">Create new</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Title</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>ShortBio</th>
+                        <th>Role</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for author in authors %}
+                    <tr>
+                        <td>{{ author.id }}</td>
+                        <td>{{ author.name }}</td>
+                        <td>{{ author.title }}</td>
+                        <td>{{ author.email }}</td>
+                        <td>{{ author.phone }}</td>
+                        <td>{{ author.shortBio }}</td>
+                        <td>{{ author.role ? author.role|join(', ') : '' }}</td>
+                        <td>
+                            {#<a href="{{ path('admin_author_show', {'id': author.id}) }}">show</a>#}
+                            <a class="btn btn-primary" href="{{ path('admin_author_edit', {'id': author.id}) }}"><i class="fa fa-edit"></i></a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {{ wPaginator(authors, totalItems, pagesCount, page) }}
+    </div>
+{% endblock %}
