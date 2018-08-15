@@ -1,0 +1,75 @@
+version: '3'
+services:
+    nginx:
+        build:
+            context: ./
+            dockerfile: docker/nginx.docker
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/ssl:/etc/nginx/ssl
+        ports:
+            - "8080:443"
+        links:
+            - php-fpm
+    php-fpm:
+        build:
+            context: ./
+            dockerfile: docker/php-fpm.docker
+        volumes:
+            - ./:/var/www
+        links:
+            - mysql
+            #- redis
+        environment:
+            -  "DATABASE_URL=mysql://blog_smfn:12345678@mysql:3306/blog_smfn"
+    php-cli:
+        build:
+            context: ./
+            dockerfile: docker/php-cli.docker
+        volumes:
+            - ./:/var/www
+        links:
+            - mysql
+            #- redis
+        environment:
+            -  "DATABASE_URL=mysql://blog_smfn:12345678@mysql:3306/blog_smfn"
+        tty: true
+    mysql:
+        image: mariadb:10.3
+        volumes:
+          - ./var/docker/mysql:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 12345678
+            MYSQL_USER: blog_smfn
+            MYSQL_PASSWORD: 12345678
+            MYSQL_DATABASE: blog_smfn
+        ports:
+          - "33061:3306"
+    #redis:
+    #    image: redis:3.0
+    #    ports:
+    #    - "63791:6379"
+    #    volumes:
+    #    - ./var/docker/redis:/data
+    #    entrypoint: redis-server --appendonly yes
+    #    restart: always
+    #node:
+    #    image: node:8.6-alpine
+    #    volumes:
+    #        - ./:/var/www
+    #    working_dir: /var/www
+    #    tty: true
+    #elasticsearch:
+    #    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.2
+    #    environment:
+    #        - bootstrap.memory_lock=true
+    #        - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+    #    ulimits:
+    #        memlock:
+    #            soft: -1
+    #            hard: -1
+    #    volumes:
+    #        - ./var/docker/elasticsearch:/usr/share/elasticsearch/data
+    #    ports:
+    #        - "9201:9200"

@@ -106,7 +106,7 @@ class Category
      */
     private $blogPosts;
     /**
-     * @ORM\Column(type="string", length=255, options={"default":""})
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":""})
      * @Assert\File(
      *     maxSize = "5M",
      *     mimeTypes = {"image/jpeg", "image/gif", "image/png", "image/tiff"},
