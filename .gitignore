@@ -10,6 +10,7 @@
 /node_modules/
 /public/build/
 /public/images/
+/public/posts/
 /public/categories/
 npm-debug.log
 yarn-error.log
