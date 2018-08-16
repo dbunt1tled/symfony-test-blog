@@ -54,12 +54,12 @@ services:
     #    - ./var/docker/redis:/data
     #    entrypoint: redis-server --appendonly yes
     #    restart: always
-    #node:
-    #    image: node:8.6-alpine
-    #    volumes:
-    #        - ./:/var/www
-    #    working_dir: /var/www
-    #    tty: true
+    node:
+        image: node:8.6-alpine
+        volumes:
+            - ./:/var/www
+        working_dir: /var/www
+        tty: true
     #elasticsearch:
     #    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.2
     #    environment:

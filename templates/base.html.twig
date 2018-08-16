@@ -15,10 +15,12 @@
 
 <body>
 <header>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-light">
         <div class="container">
 
-            <a class="navbar-brand" href="{{ path('home') }}">Home</a>
+            <a class="navbar-brand" href="{{ path('home') }}" title="Blog">
+                <img src="{{ asset('theme/logo.svg') }}" title="Blog" alt="logo Blog">
+            </a>
 
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav mr-auto">
@@ -50,6 +52,9 @@
                     {% if is_granted('ROLE_MODERATOR') %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('admin') }}">Admin</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('administrator') }}">Admin Panel</a>
                         </li>
                     {% endif %}
                     {% if is_granted('ROLE_USER') %}

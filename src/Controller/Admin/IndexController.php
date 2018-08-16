@@ -14,8 +14,8 @@ class IndexController  extends AbstractController
      */
     public function index()
     {
-        return $this->render('home/index.html.twig', [
-            'title' => 'Main Page',
+        return $this->render('admin/index/index.html.twig', [
+            'title' => 'Admin Panel',
         ]);
     }
 }
