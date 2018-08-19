@@ -1,7 +1,28 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+auth:
+    resource: 'App\Controller\AuthController'
+    type: annotation
+index:
+    resource: 'App\Controller\HomeController'
+    type: annotation
+category:
+    resource: 'App\Controller\CategoryController'
+    type: annotation
+author:
+    resource: 'App\Controller\AuthorController'
+    type: annotation
+blog:
+    resource: 'App\Controller\BlogController'
+    type: annotation
+contact:
+    resource: 'App\Controller\ContactController'
+    type: annotation
 easy_admin_bundle:
     resource: "@EasyAdminBundle/Controller/AdminController.php"
     type:     annotation
     prefix:   /admin
+#blog_route:
+#    resource: .
+#    type: blog_route

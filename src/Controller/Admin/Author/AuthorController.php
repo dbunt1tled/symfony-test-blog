@@ -5,6 +5,7 @@ namespace App\Controller\Admin\Author;
 use App\Entity\Author;
 use App\Form\Admin\Author\AuthorType;
 use App\UseCases\Blog\BlogService;
+use App\UseCases\Images\ImageUploader;
 use App\Utils\Globals;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,11 +21,16 @@ class AuthorController extends Controller
      * @var BlogService
      */
     private $blogService;
+    /**
+     * @var ImageUploader
+     */
+    private $uploader;
 
-    public function __construct(BlogService $blogService)
+    public function __construct(ImageUploader $uploader, BlogService $blogService)
     {
 
         $this->blogService = $blogService;
+        $this->uploader = $uploader;
     }
 
     /**
@@ -59,6 +65,7 @@ class AuthorController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->uploader->uploadFile($author);
             $this->blogService->saveAuthor($author);
             return $this->redirectToRoute('admin_author_index');
         }
@@ -94,6 +101,7 @@ class AuthorController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->uploader->uploadFile($author);
             $this->blogService->saveAuthor($author);
 
             return $this->redirectToRoute('admin_author_edit', ['id' => $author->getId()]);

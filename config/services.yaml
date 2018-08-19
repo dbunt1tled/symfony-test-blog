@@ -6,8 +6,11 @@
 parameters:
     locale: 'en'
     app.myparam: 'myString'
-    blog_posts_files_directory: '%kernel.project_dir%/public/images/posts'
-    categories_files_directory: '%kernel.project_dir%/public/images/categories'
+    images_root_directory: '%kernel.project_dir%/public/images'
+    images_url_directory: '/images'
+    blog_posts_files_directory: '/posts'
+    categories_files_directory: '/categories'
+    authors_files_directory: '/authors'
     paginator_page_size: 20
 services:
     # default configuration for services in *this* file
@@ -32,6 +35,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    #App\Services\Routing\BlogRouting:
+    #    tags: [routing.loader]
+
     App\Services\Mailer\Emailer:
         arguments:
             $myparam: '%app.myparam%'
@@ -66,6 +73,12 @@ services:
             #$categoryRepository: '@App\Repository\CategoryRepository'
 
     App\Services\Widgets\WPaginator\WPaginator:
+        arguments:
+            $container: '@service_container'
+    App\Services\Widgets\WCategory\WCategoriesAll:
+        arguments:
+            $container: '@service_container'
+    App\Services\Widgets\WCategory\WCategoriesChildren:
         arguments:
             $container: '@service_container'
 

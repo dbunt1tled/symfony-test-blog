@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\ImageTrait;
+use App\Entity\Traits\SlugTrait;
+use App\Entity\Traits\TimestampableTrait;
 use App\Utils\Globals;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Gedmo\Tree(type="nested")
@@ -18,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Category
 {
+    use SlugTrait,TimestampableTrait,ImageTrait;
 
     const STATUS_ACTIVE = 1;
     const STATUS_DISABLE = 0;
@@ -49,19 +51,6 @@ class Category
      * @ORM\Column(type="smallint")
      */
     private $status;
-
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updatedAt;
-
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     *
-     */
-    private $createdAt;
 
     /**
      * @Gedmo\TreeLeft
@@ -105,17 +94,6 @@ class Category
      * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="category")
      */
     private $blogPosts;
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":""})
-     * @Assert\File(
-     *     maxSize = "5M",
-     *     mimeTypes = {"image/jpeg", "image/gif", "image/png", "image/tiff"},
-     *     maxSizeMessage = "Максимальный размер файла 5MB.",
-     *     mimeTypesMessage = "Загружать можно только изображения."
-     * )
-     *
-     */
-    private $image;
 
     public function __construct()
     {
@@ -170,28 +148,6 @@ class Category
     public function setStatus(int $status): self
     {
         $this->status = $status;
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
         return $this;
     }
 
@@ -300,67 +256,19 @@ class Category
     }
 
     /**
-     * @return mixed
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param $image
-     *
-     * @return Category
-     */
-    public function setImage($image): self
-    {
-        if(is_null($image)) {
-            return $this;
-        }
-        if($image === '') {
-            $image = null;
-        }
-        $this->image = $image;
-        return $this;
-    }
-    public function deleteImage(): self
-    {
-        /**
-         * @var File $file
-         */
-        $file = $this->getImage();
-        unlink($file->getRealPath());
-        $this->setImage('');
-        return $this;
-    }
-
-    /**
-     * @ORM\PostLoad()
-     */
-    public function postLoad()
-    {
-        if ($fileName = $this->getImage()) {
-            $this->setImage(new File($this->getTargetDirectory().'/'.$fileName));
-        }
-    }
-
-    /**
-     * @ORM\PreFlush()
-     * @ORM\PreUpdate()
-     */
-    public function preSave()
-    {
-        $fileName = $this->getImage();
-        if ($fileName instanceof File) {
-            $this->setImage($fileName->getFilename());
-        }
-    }
-    /**
-     * @return mixed
+     * @return string
      */
     public function getTargetDirectory()
     {
         return Globals::getCategoryImagesDir();
+    }
+
+    /**
+     * @return string
+     */
+    public function getTargetImageUrl()
+    {
+        return Globals::getCategoryImagesUrl();
     }
     public static function getStatuses()
     {

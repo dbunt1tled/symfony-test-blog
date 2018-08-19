@@ -20,7 +20,7 @@ class RegisterType extends AbstractType
         $builder
             ->add('email', EmailType::class, ['attr' => ['placeholder' => 'Your Email'], 'label' => 'Email'])
             ->add('name', TextType::class, ['attr' => ['placeholder' => 'Your Name'], 'label' => 'Name'])
-            ->add('title', TextType::class, ['attr' => ['placeholder' => 'Your Job'], 'label' => 'Profession'])
+            ->add('job', TextType::class, ['attr' => ['placeholder' => 'Your Job'], 'label' => 'Profession'])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options'  => array('label' => 'Password'),

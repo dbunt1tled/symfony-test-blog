@@ -8,6 +8,11 @@
 
 namespace App\Utils;
 
+/**
+ * Trait PagerTrait
+ *
+ * @package App\Utils
+ */
 trait PagerTrait
 {
     public function getPage($page = 1)

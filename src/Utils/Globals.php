@@ -12,6 +12,10 @@ class Globals
 {
     protected static $categoryImagesDir;
     protected static $blogImagesDir;
+    protected static $authorImagesDir;
+    protected static $categoryImagesUrl;
+    protected static $blogImagesUrl;
+    protected static $authorImagesUrl;
     protected static $paginatorPageSize;
     /**
      * @return string
@@ -46,6 +50,37 @@ class Globals
     }
 
     /**
+     * @return string
+     */
+    public static function getCategoryImagesUrl()
+    {
+        return self::$categoryImagesUrl;
+    }
+
+    /**
+     * @param string $categoryImagesUrl
+     */
+    public static function setCategoryImagesUrl(string $categoryImagesUrl): void
+    {
+        self::$categoryImagesUrl = $categoryImagesUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getBlogImagesUrl()
+    {
+        return self::$blogImagesUrl;
+    }
+
+    /**
+     * @param string $blogImagesUrl
+     */
+    public static function setBlogImagesUrl(string $blogImagesUrl): void
+    {
+        self::$blogImagesUrl = $blogImagesUrl;
+    }
+    /**
      * @return int
      */
     public static function getPaginatorPageSize()
@@ -59,5 +94,37 @@ class Globals
     public static function setPaginatorPageSize(int $paginatorPageSize): void
     {
         self::$paginatorPageSize = $paginatorPageSize;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getAuthorImagesDir()
+    {
+        return self::$authorImagesDir;
+    }
+
+    /**
+     * @param string $authorImagesDir
+     */
+    public static function setAuthorImagesDir($authorImagesDir): void
+    {
+        self::$authorImagesDir = $authorImagesDir;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getAuthorImagesUrl()
+    {
+        return self::$authorImagesUrl;
+    }
+
+    /**
+     * @param string $authorImagesUrl
+     */
+    public static function setAuthorImagesUrl($authorImagesUrl): void
+    {
+        self::$authorImagesUrl = $authorImagesUrl;
     }
 }

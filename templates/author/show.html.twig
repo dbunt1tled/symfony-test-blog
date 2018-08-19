@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    {% if page == 1 %}
+        <h1 class="mt-5">Author: {{ author.name }}</h1>
+        <div class="mt-4 row">
+            <div class="col-3">
+                <img class="img-thumbnail" src="{{ asset(author.getTargetImageUrl()~'/'~author.image) }}">
+            </div>
+            <div class="col-9">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <tr>
+                            <td>Created At:</td><td>{{ author.createdAt.format('d m Y') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Job:</td><td>{{ author.job }}</td>
+                        </tr>
+                        <tr>
+                            <td>Bio:</td><td>{{ author.shortBio }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+
+    {% endif %}
+    <div class="content mt-3">
+        <h3>All Post's {{ author.name }}</h3>
+        <table class="table table-hover">
+            {% for blog_post in posts %}
+                <tr id="post{{ blog_post.id }}">
+                    <td>
+                        <div class="smallImage">
+                            {% set image = blog_post.getImage() %}
+                            {% if image is not empty %}
+                                <img class="img-thumbnail" src="{{ asset(blog_post.getTargetImageUrl()~'/'~image.path) }}" alt="{{ image.name }}" title="{{ image.name }}">
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td><a  href="{{ path('product',{'categorySlug': blog_post.category.slug,'productSlug': blog_post.slug}) }}" title="{{ blog_post.name }}">{{ blog_post.name }}</a></td>
+                    <td>{{ blog_post.description }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="mt-5">
+            {{ wPaginator(posts, totalItems, pagesCount, page, true,'center') }}
+        </div>
+    </div>
+{% endblock %}

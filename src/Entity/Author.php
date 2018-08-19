@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\ImageTrait;
+use App\Entity\Traits\SlugTrait;
+use App\Entity\Traits\TimestampableTrait;
+use App\Utils\Globals;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,6 +22,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Author implements UserInterface, \Serializable
 {
+    use SlugTrait, TimestampableTrait, ImageTrait;
+
     const ROLE_USER = 'ROLE_USER';
     const ROLE_MODERATOR = 'ROLE_MODERATOR';
     const ROLE_ADMIN = 'ROLE_ADMIN';
@@ -37,7 +43,7 @@ class Author implements UserInterface, \Serializable
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private $job;
 
     /**
      * @ORM\Column(type="string", length=70, unique=true)
@@ -129,14 +135,14 @@ class Author implements UserInterface, \Serializable
 
         return $this;
     }
-    public function getTitle(): ?string
+    public function getJob(): ?string
     {
-        return $this->title;
+        return $this->job;
     }
 
-    public function setTitle(string $title): self
+    public function setJob(string $job): self
     {
-        $this->title = $title;
+        $this->job = $job;
 
         return $this;
     }
@@ -307,7 +313,21 @@ class Author implements UserInterface, \Serializable
 
         return $this;
     }
+    /**
+     * @return string
+     */
+    public function getTargetDirectory()
+    {
+        return Globals::getAuthorImagesDir();
+    }
 
+    /**
+     * @return string
+     */
+    public function getTargetImageUrl()
+    {
+        return Globals::getAuthorImagesUrl();
+    }
     /**
      * @return string
      */

@@ -30,7 +30,15 @@ class ImageRepository extends ServiceEntityRepository
         $this->_em->persist($image);
         $this->_em->flush();
     }
-
+    /**
+     * @param Image $image
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function persist(Image $image)
+    {
+        $this->_em->persist($image);
+    }
     /**
      * @param Image $image
      * @param array $data

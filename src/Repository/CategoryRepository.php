@@ -159,4 +159,15 @@ class CategoryRepository extends NestedTreeRepository/*ServiceEntityRepository /
                     ->getScalarResult();
         return array_column($result, "id");;
     }
+
+    public function getAllCategoryTree()
+    {
+        $qb = $this->buildCategoryQuery(false,false,true);
+        $qb/*->select([$this->alias.'.id',$this->alias.'.name',$this->alias.'.slug',$this->alias.'.lvl'])/**/
+           ->orderBy($this->alias.'.root')
+           ->addOrderBy($this->alias.'.lft');
+        return $this->returnAll($qb);
+
+    }
+
 }

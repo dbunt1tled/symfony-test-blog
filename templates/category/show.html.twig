@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    {% if page == 1 %}
+        <h1 class="mt-5">Category: {{ category.name }}</h1>
+        <div class="mt-4 row">
+            <div class="col-3">
+                <img class="img-thumbnail" src="{{ asset(category.getTargetImageUrl()~'/'~category.image.filename) }}">
+            </div>
+            <div class="col-9">
+                {{ category.description }}
+            </div>
+            <div class="col-12">{{ WCategoriesChildren(category) }}</div>
+        </div>
+
+    {% else %}
+
+    {% endif %}
+    <div class="content mt-3">
+        <ul class="mainPosts">
+            {% for blog_post in posts %}
+                <li class="post{{ blog_post.id }}">
+                    <header class="postTitle">
+                        <h2><a href="{{ path('product',{'categorySlug': blog_post.category.slug,'productSlug': blog_post.slug}) }}" title="{{ blog_post.name }}">{{ blog_post.name }}</h2>
+                        <div class="postAuthor">
+                            {% if blog_post.author %}
+                                <a href="{{ path('author',{'slug': blog_post.author.slug}) }}"><img class="smallAvatar" src="{{ asset(blog_post.author.getTargetImageUrl()~'/'~blog_post.author.image) }}" alt="{{ blog_post.author.name }}"> {{ blog_post.author.name }}</a> <span>{{ blog_post.updatedAt|date('d F Y')  }}</span>
+                                <br>
+                                <a href="{{ path('category',{'slug': blog_post.category.slug}) }}">{{ blog_post.category.name }}</a>
+                            {% endif %}
+                        </div>
+                    </header>
+                    <article class="post">
+                        {{ blog_post.description }}
+
+                        {% set image = blog_post.getImage() %}
+                        {% if image is not empty %}
+                            <div class="mt-3">
+                                <img class="img-thumbnail col-sm-12" src="{{ asset(blog_post.getTargetImageUrl()~'/'~image.path) }}" alt="{{ image.name }}" title="{{ image.name }}">
+                            </div>
+                        {% endif %}
+                    </article>
+
+                    <footer class="postFoo mt-3">
+                        <a class="btn-primary btn-lg" href="{{ path('product',{'categorySlug': blog_post.category.slug,'productSlug': blog_post.slug}) }}" title="{{ blog_post.name }}">Readme More →</a>
+                    </footer>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="mt-5">
+            {{ wPaginator(posts, totalItems, pagesCount, page, true,'center') }}
+        </div>
+    </div>
+{% endblock %}

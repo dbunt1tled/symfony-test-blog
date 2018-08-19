@@ -6,7 +6,6 @@ use App\Utils\Globals;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 
 /**
@@ -41,7 +40,7 @@ class Image
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $title;
+    private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -87,14 +86,14 @@ class Image
         return $this;
     }
 
-    public function getTitle(): ?string
+    public function getName(): ?string
     {
-        return $this->title;
+        return $this->name;
     }
 
-    public function setTitle(string $title): self
+    public function setName(string $name): self
     {
-        $this->title = $title;
+        $this->name = $name;
 
         return $this;
     }
@@ -120,7 +119,7 @@ class Image
     public function preUpload()
     {
         if (null !== $this->file) {
-            $filename = $this->slug($this->getTitle().'_'.bin2hex(random_bytes(2)));
+            $filename = $this->slug($this->getName().'_'.bin2hex(random_bytes(2)));
             $this->path = $this->imageGroupDir().'/'.$filename . '.' . $this->file->guessExtension();
         }
     }

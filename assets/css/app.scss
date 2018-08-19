@@ -1,3 +1,69 @@
-main{
-  color: #565656;
+
+body {
+  color: #333;
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 400;
+  font-style: normal;
+  text-rendering: optimizeLegibility;
+}
+ul {
+  list-style: none;
+  padding: 10px;
+}
+a {
+  color: #548EAA;
+}
+a:hover, a:active {
+  color: #4c75a0;
+  text-decoration: none;
+}
+a.btn:hover,a.btn:active {
+  color: #FFFFFF;
+}
+.mainMenu {
+  border-bottom: 1px solid #d5dddd;
+}
+ul.mainPosts {
+  margin: 0;
+  padding: 0;
+}
+ul.mainPosts li {
+  margin-top: 50px;
+}
+.content-list__item_post {
+  padding: 20px 0;
+}
+.content-list {
+  list-style: none;
+}
+main.main article.post {
+  font-size: 16px;
+  line-height: 1.55;
+}
+main.main footer.postFoo {
+
+}
+main.main header.postTitle {
+  margin-bottom: 12px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+main.main div.postAuthor a {
+  color: #5e6973;;
+}
+.smallAvatar{
+  height: 24px;
+}
+.smallImage{
+  width: 250px;
+}
+.wWrap {
+  background: #F7F7F7;
+  padding: 10px;
+}
+.h5 {
+  text-transform: uppercase;
+  color: #505C78;
+  font-weight: bolder;
 }

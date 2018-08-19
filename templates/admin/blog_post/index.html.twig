@@ -15,8 +15,7 @@
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Title</th>
-                        <th>Slug</th>
+                        <th>Name</th>
                         <th>Description</th>
                         <th>Body</th>
                         <th>Author</th>
@@ -31,8 +30,7 @@
                 {% for blog_post in posts %}
                     <tr>
                         <td>{{ blog_post.id }}</td>
-                        <td>{{ blog_post.title }}</td>
-                        <td>{{ blog_post.slug }}</td>
+                        <td>{{ blog_post.name }}</td>
                         <td>{{ blog_post.description[:30] ~ (blog_post.description|length > 30 ? '...') }}</td>
                         <td>{{ blog_post.body|length > 50 ? blog_post.body|slice(0, 51)|split(' ')|slice(0, -1)|join(' ') ~ '…' : blog_post.body }}</td>
                         <td>{{ blog_post.author ? blog_post.author.name : '' }}</td>

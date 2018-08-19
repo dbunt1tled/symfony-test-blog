@@ -5,6 +5,7 @@ namespace App\Form\Admin\Author;
 use App\Entity\Author;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AuthorType extends AbstractType
@@ -13,9 +14,14 @@ class AuthorType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('title')
+            ->add('job')
             ->add('email')
             ->add('phone')
+            ->add('image',FileType::class,[
+                'label' => 'Image (jpg,png,gif)',
+                'data_class' => null,
+                'required' => false,
+            ])
             ->add('shortBio')
             ->add('twitter')
             ->add('github')

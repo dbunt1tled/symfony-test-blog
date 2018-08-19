@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ blog_post.name }}{% endblock %}
+
+{% block body %}
+    <h1 class="mt-5">{{ blog_post.name }}</h1>
+    <div class="content mt-3">
+        <header class="postTitle">
+            <div class="postAuthor">
+                {% if blog_post.author %}
+                    <a href="{{ path('author',{'slug': blog_post.author.slug}) }}"><img class="smallAvatar" src="{{ asset(blog_post.author.getTargetImageUrl()~'/'~blog_post.author.image) }}" alt="{{ blog_post.author.name }}"> {{ blog_post.author.name }}</a>
+                    <span>{{ blog_post.updatedAt|date('d F Y') }}</span>
+                    <br>
+                    <a href="{{ path('category',{'slug': blog_post.category.slug}) }}">{{ blog_post.category.name }}</a>
+                {% endif %}
+            </div>
+        </header>
+        <article class="post">
+            {% set images = blog_post.getImages() %}
+            <div class="images row mt-3 mb-3">
+                {% if images is not empty %}
+                    {% if images|length > 1 %}
+                        <div class="col-12 justify-content-center">
+                            <div class="slider">
+                                {% for image in images %}
+                                    <div class="col-12">
+                                        <figure>
+                                            <div class="slider-for">
+                                                <div><img class="img-thumbnail col-12" src="{{ asset(blog_post.getTargetImageUrl()~'/'~image.path) }}" alt="{{ image.name }}" title="{{ image.name }}"></div>
+                                            </div>
+                                            <figcaption><span class="badge badge-secondary">{{ image.name }}</span></figcaption>
+                                        </figure>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-12">
+                            <figure>
+                                <div class="slider-for">
+                                    <div><img class="img-thumbnail col-12" src="{{ asset(blog_post.getTargetImageUrl()~'/'~images[0].path) }}" alt="{{ images[0].name }}" title="{{ images[0].name }}"></div>
+                                </div>
+                                <figcaption><span class="badge badge-secondary">{{ images[0].name }}</span></figcaption>
+                            </figure>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {{ blog_post.body }}
+        </article>
+
+        <footer class="postFoo mt-3">
+
+        </footer>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% if blog_post.getImages()|length > 1 %}
+        <script>
+            var slideShow = $('.slider').slick({
+                dots:true,
+                autoplay:true,
+                arrows:false,
+                prevArrow:'<button type="button" class="btn bg-light"><i class="fa fa-arrow-left"></i></button>',
+                nextArrow:'<button type="button" class="btn bg-light"><i class="fa fa-arrow-right"></i></button>',
+                slidesToShow:1,
+                slidesToScroll:1
+            });
+            $('.slide').click(function() {
+                slideShow.slick('slickNext');
+            });
+        </script>
+    {% endif %}
+{% endblock %}

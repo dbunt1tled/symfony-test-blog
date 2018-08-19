@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\SlugTrait;
+use App\Entity\Traits\TimestampableTrait;
+use App\Utils\Globals;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -15,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class BlogPost
 {
+    use SlugTrait,TimestampableTrait;
 
     const STATUS_ACTIVE = 'active';
     const STATUS_MODERATE = 'moderate';
@@ -30,13 +34,7 @@ class BlogPost
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
-
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Gedmo\Slug(fields={"title"}, updatable=false)
-     */
-    private $slug;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=2000)
@@ -52,18 +50,6 @@ class BlogPost
      * @ORM\Column(type="string", length=50)
      */
     private $status;
-
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Author", inversedBy="blogPosts")
@@ -103,26 +89,14 @@ class BlogPost
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getName(): ?string
     {
-        return $this->title;
+        return $this->name;
     }
 
-    public function setTitle(string $title): self
+    public function setName(string $name): self
     {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
+        $this->name = $name;
 
         return $this;
     }
@@ -164,61 +138,7 @@ class BlogPost
     {
         return $this->status;
     }
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param \DateTimeInterface $updatedAt
-     *
-     * @return BlogPost
-     */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /*
-     * @ORM\PrePersist
-     *
-    public function prePersist()
-    {
-        if (!$this->getCreatedAt()) {
-            $this->setCreatedAt(new \DateTime());
-        }
-
-        if (!$this->getUpdatedAt()) {
-            $this->setUpdatedAt(new \DateTime());
-        }
-    }
-
-    /**
-     * @ORM\PreUpdate
-     *
-    public function preUpdate()
-    {
-        $this->setUpdatedAt(new \DateTime());
-    }
-    /**/
     public function getAuthor(): ?Author
     {
         return $this->author;
@@ -236,7 +156,7 @@ class BlogPost
      */
     public function __toString(): string
     {
-        return $this->title;
+        return $this->name;
     }
 
     public function getCategory(): ?Category
@@ -259,6 +179,10 @@ class BlogPost
         return $this->images;
     }
 
+    public function getImage()
+    {
+        return $this->getImages()->first();
+    }
 
     public function setImages($images): self
     {
@@ -319,5 +243,19 @@ class BlogPost
     public static function getDefaultStatus()
     {
         return BlogPost::STATUS_DISABLE;
+    }
+    /**
+     * @return string
+     */
+    public function getTargetDirectory()
+    {
+        return Globals::getBlogImagesDir();
+    }
+    /**
+     * @return string
+     */
+    public function getTargetImageUrl()
+    {
+        return Globals::getBlogImagesUrl();
     }
 }

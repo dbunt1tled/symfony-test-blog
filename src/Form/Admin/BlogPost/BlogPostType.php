@@ -23,7 +23,7 @@ class BlogPostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
+            ->add('name')
             ->add('slug')
             ->add('description',TextareaType::class,[
                 'attr' => ['cols' => '5', 'rows' => '2', 'resize' => 'none'],

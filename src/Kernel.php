@@ -66,11 +66,26 @@ class Kernel extends BaseKernel
         }
         parent::boot();
         $container = $this->getContainer();
+        $imagesRootDirectory = '';
+        $imagesUrlDirectory = '';
+        if ($container->hasParameter('images_root_directory')) {
+            $imagesRootDirectory = $container->getParameter('images_root_directory');
+        }
+        if ($container->hasParameter('images_url_directory')) {
+            $imagesUrlDirectory = $container->getParameter('images_url_directory');
+        }
+
         if ($container->hasParameter('categories_files_directory')) {
-                Globals::setCategoryImagesDir($container->getParameter('categories_files_directory'));
+            Globals::setCategoryImagesDir($imagesRootDirectory.$container->getParameter('categories_files_directory'));
+            Globals::setCategoryImagesUrl($imagesUrlDirectory.$container->getParameter('categories_files_directory'));
         }
         if ($container->hasParameter('blog_posts_files_directory')) {
-            Globals::setBlogImagesDir($container->getParameter('blog_posts_files_directory'));
+            Globals::setBlogImagesDir($imagesRootDirectory.$container->getParameter('blog_posts_files_directory'));
+            Globals::setBlogImagesUrl($imagesUrlDirectory.$container->getParameter('blog_posts_files_directory'));
+        }
+        if ($container->hasParameter('authors_files_directory')) {
+            Globals::setAuthorImagesDir($imagesRootDirectory.$container->getParameter('authors_files_directory'));
+            Globals::setAuthorImagesUrl($imagesUrlDirectory.$container->getParameter('authors_files_directory'));
         }
         if ($container->hasParameter('paginator_page_size')) {
             Globals::setPaginatorPageSize($container->getParameter('paginator_page_size'));

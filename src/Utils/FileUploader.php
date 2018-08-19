@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class FileUploader
 {
 
-    public function upload(UploadedFile $file,string $nameForFile = '')
+    public function upload(UploadedFile $file,string $nameForFile = '', $targetDirectory = '')
     {
         if(empty($nameForFile)){
             $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -21,17 +21,10 @@ class FileUploader
             $originalName = (string) $nameForFile;
         }
         $fileName = $this->slug($originalName).'.'.$file->guessExtension();
-        $file->move($this->getTargetDirectory(), $fileName);
+        $file->move($targetDirectory, $fileName);
         return $fileName;
     }
 
-    /**
-     * @return string
-     */
-    public function getTargetDirectory()
-    {
-        return Globals::getCategoryImagesDir();
-    }
     private function slug($slug) {
         $name = $slug;
         $slug = transliterator_transliterate(

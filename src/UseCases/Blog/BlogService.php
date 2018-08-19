@@ -47,7 +47,7 @@ class BlogService
     }
 
     /**
-     * @param string $title
+     * @param string $name
      * @param string $description
      * @param string $body
      * @param Author $author
@@ -55,10 +55,10 @@ class BlogService
      * @return BlogPost
      * @throws \Doctrine\ORM\ORMException
      */
-    public function addPost(string $title,string $description, string $body, Author $author)
+    public function addPost(string $name,string $description, string $body, Author $author)
     {
         $post = new BlogPost();
-        $post->setTitle($title)
+        $post->setName($name)
             ->setDescription($description)
             ->setBody($body)
             ->setAuthor($author);
@@ -159,6 +159,17 @@ class BlogService
     /**
      * @param Image $image
      *
+     * @return Image
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function persistImage(Image $image)
+    {
+        $this->imageRepository->persist($image);
+        return $image;
+    }
+    /**
+     * @param Image $image
+     *
      * @throws \Doctrine\ORM\ORMException
      */
     public function removeImage(Image $image)
@@ -188,9 +199,29 @@ class BlogService
     }
 
 
-    public function getAllPostPaginator($withAuthor = false, $withCategory = false, $addSelectAuthor = true, $active = true, $page = 1, $limit = 20)
+    public function getAllPostPaginator($withAuthor = false, $withCategory = false, $withImages = false, $addSelectAuthor = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
     {
-        $posts = $this->postRepository->getAllPostPaginator($withAuthor, $withCategory, $addSelectAuthor, $active, $page, $limit);
+        $posts = $this->postRepository->getAllPostPaginator($withAuthor, $withCategory,$withImages, $addSelectAuthor, $active, $page, $limit, $orderBy);
+        $totalItems = count($posts);
+        return [
+            'posts' => $posts,
+            'totalItems' => $totalItems,
+            'pagesCount' => ceil($totalItems / $limit),
+        ];
+    }
+    public function getAllPostByCategoryPaginator(Category $category, $withAuthor = false, $withCategory = false, $withImages =false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    {
+        $posts = $this->postRepository->getAllPostByCategoryPaginator($category, $withAuthor, $withCategory, $withImages, $addSelect, $active, $page, $limit, $orderBy);
+        $totalItems = count($posts);
+        return [
+            'posts' => $posts,
+            'totalItems' => $totalItems,
+            'pagesCount' => ceil($totalItems / $limit),
+        ];
+    }
+    public function getAllPostByAuthorPaginator(Author $author, $withAuthor = false, $withCategory = false, $withImages =false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    {
+        $posts = $this->postRepository->getAllPostByAuthorPaginator($author, $withAuthor, $withCategory, $withImages, $addSelect, $active, $page, $limit, $orderBy);
         $totalItems = count($posts);
         return [
             'posts' => $posts,
@@ -219,4 +250,40 @@ class BlogService
         ];
     }
 
+    /**
+     * @param string $slug
+     *
+     * @return BlogPost|null
+     */
+    public function findOnePostBySlug($slug)
+    {
+        return $this->postRepository->findOneBy(['slug' => $slug]);
+    }
+    /**
+     * @param string $slug
+     *
+     * @return Category|null
+     */
+    public function findOneCategoryBySlug($slug)
+    {
+        return $this->categoryRepository->findOneBy(['slug' => $slug]);
+    }
+    /**
+     * @param string $slug
+     *
+     * @return Author|null
+     */
+    public function findOneAuthorBySlug($slug)
+    {
+        return $this->authorRepository->findOneBy(['slug' => $slug]);
+    }
+
+    public function getAllCategoryTree()
+    {
+        return $this->categoryRepository->getAllCategoryTree();
+    }
+    public function childrenHierarchy($node = null, $direct = false, array $options = array(), $includeNode = false)
+    {
+        return $this->categoryRepository->childrenHierarchy($node,$direct,$options,$includeNode);
+    }
 }

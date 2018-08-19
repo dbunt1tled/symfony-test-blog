@@ -36,13 +36,15 @@ class ImageUploader
         if ($file instanceof UploadedFile) {
             $fileName = $destinationFileName;
             if(empty($fileName)){
-                if(method_exists($entity,'getTitle')) {
-                    $fileName = $entity->getTitle();
-                }elseif (method_exists($entity,'getName')) {
+                if (method_exists($entity,'getName')) {
                     $fileName = $entity->getName();
                 }
             }
-            $fileName = $this->uploader->upload($file,$fileName);
+            $targetDirectory = '';
+            if (method_exists($entity,'getTargetDirectory')) {
+                $targetDirectory = $entity->getTargetDirectory();
+            }
+            $fileName = $this->uploader->upload($file,$fileName,$targetDirectory);
             $entity->setImage($fileName);
         }
     }

@@ -73,7 +73,7 @@ class BlogController extends Controller
             return $this->redirectToRoute('blog');
         }
         try{
-            $this->blogService->updatePost($post,['title'=> S::safeTruncate($text,10),'description' => S::safeTruncate($text,25),'body' => $text]);
+            $this->blogService->updatePost($post,['name'=> S::safeTruncate($text,10),'description' => S::safeTruncate($text,25),'body' => $text]);
         }catch (\Exception $exception) {
             $this->addFlash('danger','Something went wrong: '.$exception->getMessage());
         }

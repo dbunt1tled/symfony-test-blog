@@ -8,4 +8,5 @@ try {
     })
     //require('summernote/dist/summernote-bs4');
     require('bootstrap-datepicker');
+    require('slick-carousel');
 } catch (e) {}
