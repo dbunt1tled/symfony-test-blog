@@ -1,4 +1,9 @@
-
+body, wrapper {
+  min-height:100vh;
+}
+.flex-fill {
+  flex:1 1 auto;
+}
 body {
   color: #333;
   font-size: 16px;
@@ -50,7 +55,7 @@ main.main header.postTitle {
   line-height: 1.55;
 }
 main.main div.postAuthor a {
-  color: #5e6973;;
+  color: #5e6973;
 }
 .smallAvatar{
   height: 24px;
@@ -66,4 +71,11 @@ main.main div.postAuthor a {
   text-transform: uppercase;
   color: #505C78;
   font-weight: bolder;
+}
+footer{
+  background: #F7F7F7;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+
 }

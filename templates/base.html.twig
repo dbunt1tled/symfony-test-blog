@@ -14,76 +14,82 @@
 </head>
 
 <body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-light bg-light mainMenu">
-        <div class="container">
+<wrapper class="d-flex flex-column">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light bg-light mainMenu">
+            <div class="container">
 
-            <a class="navbar-brand" href="{{ path('home') }}" title="Blog">
-                <img src="{{ asset('theme/logo.svg') }}" title="Blog" alt="logo Blog">
-            </a>
+                <a class="navbar-brand" href="{{ path('home') }}" title="Blog">
+                    <img src="{{ asset('theme/logo.svg') }}" title="Blog" alt="logo Blog">
+                </a>
 
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('about') }}">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('ask',{slug:'bob-marley'}) }}">Ask</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('contact') }}">Send Us</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav navbar-right">
-                    {% if (not is_granted('ROLE_USER')) %}
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('login') }}">Login</a>
+                            <a class="nav-link" href="{{ path('about') }}">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('register') }}">Sign Up</a>
+                            <a class="nav-link" href="{{ path('ask',{slug:'bob-marley'}) }}">Ask</a>
                         </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_USER') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">{{ app.user.username }}</a>
+                            <a class="nav-link" href="{{ path('contact') }}">Send Us</a>
                         </li>
-                    {% endif %}
+                    </ul>
+                    <ul class="navbar-nav navbar-right">
+                        {% if (not is_granted('ROLE_USER')) %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('login') }}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('register') }}">Sign Up</a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_USER') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">{{ app.user.username }}</a>
+                            </li>
+                        {% endif %}
 
-                    {% if is_granted('ROLE_MODERATOR') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('admin') }}">Admin</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('administrator') }}">Admin Panel</a>
-                        </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_USER') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ logout_path() }}">Logout</a>
-                        </li>
-                    {% endif %}
-                </ul>
+                        {% if is_granted('ROLE_MODERATOR') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('admin') }}">Admin</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('administrator') }}">Admin Panel</a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_USER') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ logout_path() }}">Logout</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
+
+        </nav>
+    </header>
+    <main role="main" class="flex-fill container main">
+        {% include 'partials/flash.html.twig' %}
+        <div class="row">
+            <section class="col-md-9">
+                {% block breadcrumbs %}{% endblock%}
+                {% include '/partials/breadcrumb.html.twig' %}
+                {% block body %}{% endblock %}
+            </section>
+            <aside class="col-md-3">
+                {% block aside %}
+                    {{ WCategoriesAll() }}
+                {% endblock %}
+            </aside>
         </div>
-
-    </nav>
-</header>
-<main role="main" class="container main">
-    {% include 'partials/flash.html.twig' %}
-    <div class="row">
-        <section class="col-md-9">
-            {% block breadcrumbs %}{% endblock%}
-            {% include '/partials/breadcrumb.html.twig' %}
-            {% block body %}{% endblock %}
-        </section>
-        <aside class="col-md-3">
-            {% block aside %}
-                {{ WCategoriesAll() }}
-            {% endblock %}
-        </aside>
-    </div>
-</main>
-
+    </main>
+    <footer class="align-bottom row-fluid">
+        <div class="container">
+            <b>&copy; {{ "now"|date("Y") }}<b> <span class="text-muted">unt1tled@ua.fm</span>
+        </div>
+    </footer>
+</wrapper>
 <script src="{{ asset('build/js/app.js') }}"></script>
 {% block javascripts %}{% endblock %}
 </body>

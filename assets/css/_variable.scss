@@ -1,7 +1,7 @@
 
 // Body
 $body-bg: #fff;
-
+$block-bg: #F7F7F7;
 // Other
 $primary: #548EAA;
 $success: #4db24d;
@@ -10,4 +10,4 @@ $warning: #f0ad4e;
 $danger: #d9534f;
 
 $breadcrumb-divider: quote("→");
-$breadcrumb-bg: #F7F7F7;
+$breadcrumb-bg: $block-bg;
