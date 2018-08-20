@@ -12,6 +12,8 @@ parameters:
     categories_files_directory: '/categories'
     authors_files_directory: '/authors'
     paginator_page_size: 20
+    main.twig.w_bread_crumb.home.route: home
+    main.twig.w_bread_crumb.home.label: Home
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -81,6 +83,14 @@ services:
     App\Services\Widgets\WCategory\WCategoriesChildren:
         arguments:
             $container: '@service_container'
+    App\Services\Widgets\WBreadCrumb\WBreadCrumb:
+        arguments:
+            $container: '@service_container'
+            $breadcrumbs: '@white_october_breadcrumbs'
+            $router: '@router'
+            $homeRoute: '%main.twig.w_bread_crumb.home.route%'
+            $homeLabel: '%main.twig.w_bread_crumb.home.label%'
+
 
 #    App\EventListener\ImageUploadListener:
 #        tags:

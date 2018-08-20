@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ blog_post.name }}{% endblock %}
-
+{% block breadcrumbs %}
+    {{ WBreadCrumb(blog_post.category.name, path('category',{'slug': blog_post.category.slug})) }}
+    {{ WBreadCrumb(blog_post.name) }}
+{% endblock%}
 {% block body %}
     <h1 class="mt-5">{{ blog_post.name }}</h1>
     <div class="content mt-3">

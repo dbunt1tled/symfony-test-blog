@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Login on Our Site{% endblock %}
-
+{% block breadcrumbs %}
+    {{ WBreadCrumb('Login') }}
+{% endblock%}
 {% block body %}
     <div class="example-wrapper">
         <h1>Login on Our Site ✅</h1>

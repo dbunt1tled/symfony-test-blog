@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ title }}{% endblock %}
-
+{% block breadcrumbs %}
+    {{ WBreadCrumb(category.name) }}
+{% endblock%}
 {% block body %}
     {% if page == 1 %}
         <h1 class="mt-5">Category: {{ category.name }}</h1>

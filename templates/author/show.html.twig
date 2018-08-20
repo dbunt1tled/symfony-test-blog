@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ title }}{% endblock %}
-
+{% block breadcrumbs %}
+    {{ WBreadCrumb(author.name) }}
+{% endblock%}
 {% block body %}
     {% if page == 1 %}
         <h1 class="mt-5">Author: {{ author.name }}</h1>

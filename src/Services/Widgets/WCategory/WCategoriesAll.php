@@ -45,7 +45,7 @@ class WCategoriesAll extends \Twig_Extension
             'childOpen' => '<li>',
             'childClose' => '</li>',
             'nodeDecorator' => function($node) {
-                return '<a href="'.$node['slug'].'">'.$node['name'].'</a>';
+                return '<a href="/'.$node['slug'].'">'.$node['name'].'</a>';
             }
         );
         $htmlTree = $this->blogService->childrenHierarchy(
