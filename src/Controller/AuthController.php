@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Author;
+use App\Entity\User;
 use App\Form\Auth\LoginType;
 use App\Form\Auth\RegisterType;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +48,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $user = new Author();
+        $user = new User();
         $form = $this->createRegistrationForm($user);
         return $this->render('auth/register.html.twig', [
             'form'          => $form->createView(),
@@ -63,7 +63,7 @@ class AuthController extends Controller
      */
     public function handleRegisterForm(Request $request)
     {
-        $user = new Author();
+        $user = new User();
         $form = $this->createRegistrationForm($user);
         $form->handleRequest($request);
         if(!$form->isSubmitted() || !$form->isValid())

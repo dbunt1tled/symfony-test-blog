@@ -67,7 +67,7 @@ class BlogController extends Controller
      */
     public function update($id,$text)
     {
-        $post = $this->blogService->findOnePost(['id'=> $id, 'author' => $this->getUser()]);
+        $post = $this->blogService->findOnePost(['id'=> $id, 'user' => $this->getUser()]);
         if(!$post) {
             $this->addFlash('danger','Something went wrong! Post not found.');
             return $this->redirectToRoute('blog');
@@ -89,7 +89,7 @@ class BlogController extends Controller
      */
     public function delete($id)
     {
-        $post = $this->blogService->findOnePost(['id'=> $id, 'author' => $this->getUser()]);
+        $post = $this->blogService->findOnePost(['id'=> $id, 'user' => $this->getUser()]);
         if(!$post) {
             $this->addFlash('danger','Something went wrong! Post not found.');
             return $this->redirectToRoute('blog');

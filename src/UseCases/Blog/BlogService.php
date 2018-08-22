@@ -8,11 +8,11 @@
 
 namespace App\UseCases\Blog;
 
-use App\Entity\Author;
+use App\Entity\User;
 use App\Entity\BlogPost;
 use App\Entity\Category;
 use App\Entity\Image;
-use App\Repository\AuthorRepository;
+use App\Repository\UserRepository;
 use App\Repository\BlogPostRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\ImageRepository;
@@ -26,9 +26,9 @@ class BlogService
      */
     private $postRepository;
     /**
-     * @var AuthorRepository
+     * @var UserRepository
      */
-    private $authorRepository;
+    private $userRepository;
     /**
      * @var ImageRepository
      */
@@ -38,10 +38,10 @@ class BlogService
      */
     private $categoryRepository;
 
-    public function __construct(EntityManager $em/*, BlogPostRepository $postRepository, AuthorRepository $authorRepository, ImageRepository $imageRepository, CategoryRepository $categoryRepository/**/)
+    public function __construct(EntityManager $em/*, BlogPostRepository $postRepository, UserRepository $userRepository, ImageRepository $imageRepository, CategoryRepository $categoryRepository/**/)
     {
         $this->postRepository = $em->getRepository('App:BlogPost');/*$postRepository;/**/
-        $this->authorRepository = $em->getRepository('App:Author');/*$authorRepository;/**/
+        $this->userRepository = $em->getRepository('App:User');/*$userRepository;/**/
         $this->imageRepository = $em->getRepository('App:Image');/*$imageRepository;/**/
         $this->categoryRepository = $em->getRepository('App:Category');/*$categoryRepository;/**/
     }
@@ -50,18 +50,18 @@ class BlogService
      * @param string $name
      * @param string $description
      * @param string $body
-     * @param Author $author
+     * @param User $user
      *
      * @return BlogPost
      * @throws \Doctrine\ORM\ORMException
      */
-    public function addPost(string $name,string $description, string $body, Author $author)
+    public function addPost(string $name,string $description, string $body, User $user)
     {
         $post = new BlogPost();
         $post->setName($name)
             ->setDescription($description)
             ->setBody($body)
-            ->setAuthor($author);
+            ->setUser($user);
         $this->postRepository->save($post);
         return $post;
     }
@@ -102,6 +102,15 @@ class BlogService
     }
 
     /**
+     * @param array $condition
+     *
+     * @return Image|null
+     */
+    public function findOneImage(array $condition)
+    {
+        return $this->imageRepository->findOneBy($condition);
+    }
+    /**
      * @param BlogPost $post
      *
      * @throws \Doctrine\ORM\ORMException
@@ -112,38 +121,38 @@ class BlogService
     }
 
     /**
-     * @param Author $author
+     * @param User $user
      *
-     * @return Author
+     * @return User
      * @throws \Doctrine\ORM\ORMException
      */
-    public function saveAuthor(Author $author)
+    public function saveUser(User $user)
     {
-        $this->authorRepository->save($author);
-        return $author;
+        $this->userRepository->save($user);
+        return $user;
     }
 
     /**
-     * @param Author $author
+     * @param User $user
      * @param array    $data
      *
-     * @return Author
+     * @return User
      * @throws \Doctrine\ORM\ORMException
      */
-    public function updateAuthor(Author $author, array $data)
+    public function updateUser(User $user, array $data)
     {
-        $this->authorRepository->update($author, $data);
-        return $author;
+        $this->userRepository->update($user, $data);
+        return $user;
     }
 
     /**
-     * @param Author $author
+     * @param User $user
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    public function removeAuthor(Author $author)
+    public function removeUser(User $user)
     {
-        return $this->authorRepository->remove($author);
+        return $this->userRepository->remove($user);
     }
     /**
      * @param Image $image
@@ -199,9 +208,9 @@ class BlogService
     }
 
 
-    public function getAllPostPaginator($withAuthor = false, $withCategory = false, $withImages = false, $addSelectAuthor = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    public function getAllPostPaginator($withUser = false, $withCategory = false, $withImages = false, $addSelectUser = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
     {
-        $posts = $this->postRepository->getAllPostPaginator($withAuthor, $withCategory,$withImages, $addSelectAuthor, $active, $page, $limit, $orderBy);
+        $posts = $this->postRepository->getAllPostPaginator($withUser, $withCategory,$withImages, $addSelectUser, $active, $page, $limit, $orderBy);
         $totalItems = count($posts);
         return [
             'posts' => $posts,
@@ -209,9 +218,9 @@ class BlogService
             'pagesCount' => ceil($totalItems / $limit),
         ];
     }
-    public function getAllPostByCategoryPaginator(Category $category, $withAuthor = false, $withCategory = false, $withImages =false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    public function getAllPostByCategoryPaginator(Category $category, $withUser = false, $withCategory = false, $withImages =false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
     {
-        $posts = $this->postRepository->getAllPostByCategoryPaginator($category, $withAuthor, $withCategory, $withImages, $addSelect, $active, $page, $limit, $orderBy);
+        $posts = $this->postRepository->getAllPostByCategoryPaginator($category, $withUser, $withCategory, $withImages, $addSelect, $active, $page, $limit, $orderBy);
         $totalItems = count($posts);
         return [
             'posts' => $posts,
@@ -219,9 +228,9 @@ class BlogService
             'pagesCount' => ceil($totalItems / $limit),
         ];
     }
-    public function getAllPostByAuthorPaginator(Author $author, $withAuthor = false, $withCategory = false, $withImages =false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    public function getAllPostByUserPaginator(User $user, $withUser = false, $withCategory = false, $withImages =false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
     {
-        $posts = $this->postRepository->getAllPostByAuthorPaginator($author, $withAuthor, $withCategory, $withImages, $addSelect, $active, $page, $limit, $orderBy);
+        $posts = $this->postRepository->getAllPostByUserPaginator($user, $withUser, $withCategory, $withImages, $addSelect, $active, $page, $limit, $orderBy);
         $totalItems = count($posts);
         return [
             'posts' => $posts,
@@ -239,12 +248,12 @@ class BlogService
             'pagesCount' => ceil($totalItems / $limit),
         ];
     }
-    public function getAllAuthorPaginator($page = 1, $limit = 20)
+    public function getAllUserPaginator($page = 1, $limit = 20)
     {
-        $authors = $this->authorRepository->getAllAuthorPaginator($page, $limit);
-        $totalItems = count($authors);
+        $users = $this->userRepository->getAllUserPaginator($page, $limit);
+        $totalItems = count($users);
         return [
-            'authors' => $authors,
+            'users' => $users,
             'totalItems' => $totalItems,
             'pagesCount' => ceil($totalItems / $limit),
         ];
@@ -271,11 +280,11 @@ class BlogService
     /**
      * @param string $slug
      *
-     * @return Author|null
+     * @return User|null
      */
-    public function findOneAuthorBySlug($slug)
+    public function findOneUserBySlug($slug)
     {
-        return $this->authorRepository->findOneBy(['slug' => $slug]);
+        return $this->userRepository->findOneBy(['slug' => $slug]);
     }
 
     public function getAllCategoryTree()
@@ -285,5 +294,40 @@ class BlogService
     public function childrenHierarchy($node = null, $direct = false, array $options = array(), $includeNode = false)
     {
         return $this->categoryRepository->childrenHierarchy($node,$direct,$options,$includeNode);
+    }
+
+    public function findAllPosts($withUser = false, $withCategory = false, $withImages =false, $active = true, $page = 1, $limit = 100,$returnQuery = false)
+    {
+        return $this->postRepository->findAllPosts($withUser, $withCategory, $withImages, $active, $page, $limit,$returnQuery);
+    }
+
+    /**
+     * @param string $username
+     *
+     * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function loadUserByUsername(string $username)
+    {
+        return $this->userRepository->loadUserByUsername($username);
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return User|null|object
+     */
+    public function findUser(int $userId)
+    {
+        return $this->userRepository->find($userId);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserRepositoryClassName()
+    {
+        return $this->userRepository->getClassName();
     }
 }

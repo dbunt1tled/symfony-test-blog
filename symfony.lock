@@ -104,8 +104,26 @@
     "egulias/email-validator": {
         "version": "2.1.4"
     },
+    "exsyst/swagger": {
+        "version": "v0.4.1"
+    },
     "fig/link-util": {
         "version": "1.0.0"
+    },
+    "friendsofsymfony/oauth-server-bundle": {
+        "version": "2.0-dev"
+    },
+    "friendsofsymfony/oauth2-php": {
+        "version": "1.2.3"
+    },
+    "friendsofsymfony/rest-bundle": {
+        "version": "2.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.2",
+            "ref": "258300d52be6ad59b32a888d5ddafbf9638540ff"
+        }
     },
     "fzaninotto/faker": {
         "version": "v1.8.0"
@@ -125,8 +143,35 @@
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
+    "jms/metadata": {
+        "version": "1.6.0"
+    },
+    "jms/parser-lib": {
+        "version": "1.0.0"
+    },
+    "jms/serializer": {
+        "version": "1.13.0"
+    },
+    "jms/serializer-bundle": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "fe60ce509ef04a3f40da96e3979bc8d9b13b2372"
+        }
+    },
     "monolog/monolog": {
         "version": "1.23.0"
+    },
+    "nelmio/api-doc-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "c8e0c38e1a280ab9e37587a8fa32b251d5bc1c94"
+        }
     },
     "nikic/php-parser": {
         "version": "v4.0.3"
@@ -137,6 +182,9 @@
     "pagerfanta/pagerfanta": {
         "version": "v1.1.0"
     },
+    "phpcollection/phpcollection": {
+        "version": "0.5.0"
+    },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
     },
@@ -145,6 +193,9 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "0.4.0"
+    },
+    "phpoption/phpoption": {
+        "version": "1.5.0"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -467,10 +518,19 @@
     "whiteoctober/breadcrumbs-bundle": {
         "version": "1.4.2"
     },
+    "willdurand/jsonp-callback-validator": {
+        "version": "v1.1.0"
+    },
+    "willdurand/negotiation": {
+        "version": "v2.3.1"
+    },
     "zendframework/zend-code": {
         "version": "3.3.0"
     },
     "zendframework/zend-eventmanager": {
         "version": "3.2.1"
+    },
+    "zircote/swagger-php": {
+        "version": "2.0.13"
     }
 }

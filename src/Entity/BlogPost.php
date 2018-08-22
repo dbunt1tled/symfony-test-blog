@@ -52,10 +52,10 @@ class BlogPost
     private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Author", inversedBy="blogPosts")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="blogPosts")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $author;
+    private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="blogPosts")
@@ -139,14 +139,14 @@ class BlogPost
         return $this->status;
     }
 
-    public function getAuthor(): ?Author
+    public function getUser(): ?User
     {
-        return $this->author;
+        return $this->user;
     }
 
-    public function setAuthor(?Author $author): self
+    public function setUser(?User $user): self
     {
-        $this->author = $author;
+        $this->user = $user;
 
         return $this;
     }

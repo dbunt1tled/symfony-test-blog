@@ -1,26 +1,26 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ title }}{% endblock %}
 {% block breadcrumbs %}
-    {{ WBreadCrumb(author.name) }}
+    {{ WBreadCrumb(user.name) }}
 {% endblock%}
 {% block body %}
     {% if page == 1 %}
-        <h1 class="mt-5">Author: {{ author.name }}</h1>
+        <h1 class="mt-5">User: {{ user.name }}</h1>
         <div class="mt-4 row">
             <div class="col-3">
-                <img class="img-thumbnail" src="{{ asset(author.getTargetImageUrl()~'/'~author.image) }}">
+                <img class="img-thumbnail" src="{{ asset(user.getTargetImageUrl()~'/'~user.image) }}">
             </div>
             <div class="col-9">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover table-striped">
                         <tr>
-                            <td>Created At:</td><td>{{ author.createdAt.format('d m Y') }}</td>
+                            <td>Created At:</td><td>{{ user.createdAt.format('d m Y') }}</td>
                         </tr>
                         <tr>
-                            <td>Job:</td><td>{{ author.job }}</td>
+                            <td>Job:</td><td>{{ user.job }}</td>
                         </tr>
                         <tr>
-                            <td>Bio:</td><td>{{ author.shortBio }}</td>
+                            <td>Bio:</td><td>{{ user.shortBio }}</td>
                         </tr>
                     </table>
                 </div>
@@ -31,7 +31,7 @@
 
     {% endif %}
     <div class="content mt-3">
-        <h3>All Post's {{ author.name }}</h3>
+        <h3>All Post's {{ user.name }}</h3>
         <table class="table table-hover">
             {% for blog_post in posts %}
                 <tr id="post{{ blog_post.id }}">

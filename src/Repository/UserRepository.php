@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Author;
+use App\Entity\User;
 use App\Utils\PagerTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Inflector\Inflector;
@@ -12,71 +12,71 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Author|null find($id, $lockMode = null, $lockVersion = null)
- * @method Author|null findOneBy(array $criteria, array $orderBy = null)
- * @method Author[]    findAll()
- * @method Author[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method User|null find($id, $lockMode = null, $lockVersion = null)
+ * @method User|null findOneBy(array $criteria, array $orderBy = null)
+ * @method User[]    findAll()
+ * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AuthorRepository extends ServiceEntityRepository
+class UserRepository extends ServiceEntityRepository
 {
     use PagerTrait;
 
-    private $alias = 'ar';
+    private $alias = 'u';
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Author::class);
+        parent::__construct($registry, User::class);
     }
 
     /**
-     * @param Author $author
+     * @param User $user
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    public function save(Author $author)
+    public function save(User $user)
     {
-        $this->_em->persist($author);
+        $this->_em->persist($user);
         $this->_em->flush();
     }
 
     /**
-     * @param Author $author
+     * @param User $user
      * @param array    $data
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function update(Author $author,array $data)
+    public function update(User $user,array $data)
     {
         foreach ($data as $key => $value){
             $key = Inflector::camelize($key);
-            if (property_exists($author, $key)) {
-                $author->{'set'.ucfirst($key)}($value); // ucfirst() is not required but I think it's cleaner
+            if (property_exists($user, $key)) {
+                $user->{'set'.ucfirst($key)}($value); // ucfirst() is not required but I think it's cleaner
             }
         }
-        $this->_em->persist($author);
+        $this->_em->persist($user);
         $this->_em->flush();
     }
     /**
-     * @param Author $author
+     * @param User $user
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    public function remove(Author $author)
+    public function remove(User $user)
     {
-        $this->_em->remove($author);
+        $this->_em->remove($user);
         $this->_em->flush();
     }
 
 //    /**
-//     * @return Author[] Returns an array of Author objects
+//     * @return User[] Returns an array of Users objects
 //     */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
+            ->orderBy('u.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
@@ -85,10 +85,10 @@ class AuthorRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Author
+    public function findOneBySomeField($value): ?User
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
@@ -103,7 +103,7 @@ class AuthorRepository extends ServiceEntityRepository
                         ->getScalarResult();
         return array_column($result, "id");;
     }
-    public function getAllAuthorPaginator($page = 1, $limit = 20)
+    public function getAllUserPaginator($page = 1, $limit = 20)
     {
         $page = $this->getPage($page);
         $limit = $this->getLimit($limit);
@@ -147,4 +147,22 @@ class AuthorRepository extends ServiceEntityRepository
         return $qb;
     }
     /**/
+
+    /**
+     * @param string $username
+     *
+     * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function loadUserByUsername(string $username)
+    {
+        $result = $this->createQueryBuilder($this->alias)
+            ->where('u.name = :name OR u.email = :email')
+            ->setParameter('name', $username)
+            ->setParameter('email', $username)
+            ->getQuery()
+            ->getSingleResult();
+        return $result;
+    }
 }

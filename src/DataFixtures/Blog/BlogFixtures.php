@@ -8,7 +8,7 @@
 
 namespace App\DataFixtures\Blog;
 
-use App\Entity\Author;
+use App\Entity\User;
 use App\Entity\BlogPost;
 use App\Entity\Category;
 use App\Entity\Image;
@@ -37,31 +37,31 @@ class BlogFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $countAuthors = random_int(10,20);
+        $countUsers = random_int(10,20);
         $countCategories = random_int(1,6);
-        $this->loadAuthors($manager,$countAuthors);
+        $this->loaUsers($manager,$countUsers);
         $manager->flush();
         $this->loadCategories($manager,$countCategories);
         $manager->flush();
         $this->loadBlogPosts($manager);
         $manager->flush();
     }
-    private function loadAuthors(ObjectManager $manager, int $countAuthors)
+    private function loaUsers(ObjectManager $manager, int $countUsers)
     {
-        for ($i = 0; $i < $countAuthors; $i++) {
-            $author = new Author();
+        for ($i = 0; $i < $countUsers; $i++) {
+            $user = new User();
             $num = random_int(0,20);
-            $fileOrig = __DIR__.'/images/author/' .$num. '.png';
-            $fileDest = __DIR__.'/images/author/tmp/' .$i. '.png';
+            $fileOrig = __DIR__.'/images/user/' .$num. '.png';
+            $fileDest = __DIR__.'/images/user/tmp/' .$i. '.png';
             if(is_file($fileDest)){
                 unlink($fileDest);
             }
             @copy($fileOrig, $fileDest);
             $file = new UploadedFile($fileDest, 'Image1', null, null, null, true);
-            $nameAuthor = $this->faker->name;
-            $fileName = $this->uploader->upload($file,$nameAuthor,$author->getTargetDirectory());
+            $nameUser = $this->faker->name;
+            $fileName = $this->uploader->upload($file,$nameUser,$user->getTargetDirectory());
 
-            $author->setName($nameAuthor)
+            $user->setName($nameUser)
                    ->setJob($this->faker->jobTitle)
                    ->setEmail($this->faker->unique()->safeEmail)
                    ->setPhone($this->faker->unique()->phoneNumber)
@@ -70,9 +70,9 @@ class BlogFixtures extends Fixture
                    ->setGithub($this->faker->word)
                    ->setTwitter($this->faker->word)
                    ->setPlainPassword('12345678')
-                   ->setPassword($this->passwordEncoder->encodePassword($author, $author->getPlainPassword()))
-                   ->setRole([Author::ROLE_USER]);
-            $manager->persist($author);
+                   ->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()))
+                   ->setRole([User::ROLE_USER]);
+            $manager->persist($user);
         }
     }
     private function loadCategories(ObjectManager $manager, int $countCategories)
@@ -145,19 +145,19 @@ class BlogFixtures extends Fixture
     private function loadBlogPosts(ObjectManager $manager)
     {
 
-        $authorRepository = $manager->getRepository('App:Author');
+        $userRepository = $manager->getRepository('App:User');
         $categoryRepository = $manager->getRepository('App:Category');
-        $authorsIds = $authorRepository->getAllIds();
+        $usersIds = $userRepository->getAllIds();
         $categoriesIds = $categoryRepository->getAllIds();
         for ($i = 0; $i < 30; $i++) {
-            $authorId = array_rand($authorsIds, 1);
+            $userId = array_rand($usersIds, 1);
             $categoryId = array_rand($categoriesIds, 1);
-            $author     = $authorRepository->findOneBy(['id' => $authorsIds[$authorId]]);
+            $user     = $userRepository->findOneBy(['id' => $usersIds[$userId]]);
             $category   = $categoryRepository->findOneBy(['id' => $categoriesIds[$categoryId]]);
             $countPosts = random_int(3,7);
             for ($j = 0; $j < $countPosts; $j++) {
                 sleep(1);
-                if (!$author || !$category) {
+                if (!$user || !$category) {
                     continue;
                 }
                 $blogPost = new BlogPost();
@@ -182,7 +182,7 @@ class BlogFixtures extends Fixture
                          ->setBody($this->faker->text(2600))
                          ->setCategory($category)
                          ->setStatus(BlogPost::STATUS_ACTIVE)
-                         ->setAuthor($author)
+                         ->setUser($user)
                          ->addImage($image);
                 $manager->persist($blogPost);
             }

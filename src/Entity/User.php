@@ -14,13 +14,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Author
+ * User
  * 
- * @ORM\Table(name="author")
- * @ORM\Entity(repositoryClass="App\Repository\AuthorRepository")
+ * @ORM\Table(name="user")
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity("email")
  */
-class Author implements UserInterface, \Serializable
+class User implements UserInterface, \Serializable
 {
     use SlugTrait, TimestampableTrait, ImageTrait;
 
@@ -103,7 +103,7 @@ class Author implements UserInterface, \Serializable
     private $role;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="author")
+     * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="user")
      */
     private $blogPosts;
 
@@ -295,7 +295,7 @@ class Author implements UserInterface, \Serializable
     {
         if (!$this->blogPosts->contains($blogPost)) {
             $this->blogPosts[] = $blogPost;
-            $blogPost->setAuthor($this);
+            $blogPost->setUser($this);
         }
 
         return $this;
@@ -306,8 +306,8 @@ class Author implements UserInterface, \Serializable
         if ($this->blogPosts->contains($blogPost)) {
             $this->blogPosts->removeElement($blogPost);
             // set the owning side to null (unless already changed)
-            if ($blogPost->getAuthor() === $this) {
-                $blogPost->setAuthor(null);
+            if ($blogPost->getUser() === $this) {
+                $blogPost->setUser(null);
             }
         }
 
@@ -318,7 +318,7 @@ class Author implements UserInterface, \Serializable
      */
     public function getTargetDirectory()
     {
-        return Globals::getAuthorImagesDir();
+        return Globals::getUserImagesDir();
     }
 
     /**
@@ -326,7 +326,7 @@ class Author implements UserInterface, \Serializable
      */
     public function getTargetImageUrl()
     {
-        return Globals::getAuthorImagesUrl();
+        return Globals::getUserImagesUrl();
     }
     /**
      * @return string

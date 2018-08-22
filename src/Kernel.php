@@ -83,9 +83,9 @@ class Kernel extends BaseKernel
             Globals::setBlogImagesDir($imagesRootDirectory.$container->getParameter('blog_posts_files_directory'));
             Globals::setBlogImagesUrl($imagesUrlDirectory.$container->getParameter('blog_posts_files_directory'));
         }
-        if ($container->hasParameter('authors_files_directory')) {
-            Globals::setAuthorImagesDir($imagesRootDirectory.$container->getParameter('authors_files_directory'));
-            Globals::setAuthorImagesUrl($imagesUrlDirectory.$container->getParameter('authors_files_directory'));
+        if ($container->hasParameter('users_files_directory')) {
+            Globals::setUserImagesDir($imagesRootDirectory.$container->getParameter('users_files_directory'));
+            Globals::setUserImagesUrl($imagesUrlDirectory.$container->getParameter('users_files_directory'));
         }
         if ($container->hasParameter('paginator_page_size')) {
             Globals::setPaginatorPageSize($container->getParameter('paginator_page_size'));

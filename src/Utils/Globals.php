@@ -12,10 +12,10 @@ class Globals
 {
     protected static $categoryImagesDir;
     protected static $blogImagesDir;
-    protected static $authorImagesDir;
+    protected static $userImagesDir;
     protected static $categoryImagesUrl;
     protected static $blogImagesUrl;
-    protected static $authorImagesUrl;
+    protected static $userImagesUrl;
     protected static $paginatorPageSize;
     /**
      * @return string
@@ -99,32 +99,32 @@ class Globals
     /**
      * @return string
      */
-    public static function getAuthorImagesDir()
+    public static function getUserImagesDir()
     {
-        return self::$authorImagesDir;
+        return self::$userImagesDir;
     }
 
     /**
-     * @param string $authorImagesDir
+     * @param string $userImagesDir
      */
-    public static function setAuthorImagesDir($authorImagesDir): void
+    public static function setUserImagesDir($userImagesDir): void
     {
-        self::$authorImagesDir = $authorImagesDir;
+        self::$userImagesDir = $userImagesDir;
     }
 
     /**
      * @return string
      */
-    public static function getAuthorImagesUrl()
+    public static function getUserImagesUrl()
     {
-        return self::$authorImagesUrl;
+        return self::$userImagesUrl;
     }
 
     /**
-     * @param string $authorImagesUrl
+     * @param string $userImagesUrl
      */
-    public static function setAuthorImagesUrl($authorImagesUrl): void
+    public static function setUserImagesUrl($userImagesUrl): void
     {
-        self::$authorImagesUrl = $authorImagesUrl;
+        self::$userImagesUrl = $userImagesUrl;
     }
 }

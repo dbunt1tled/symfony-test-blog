@@ -14,8 +14,8 @@
                     <header class="postTitle">
                         <h2><a href="{{ path('product',{'categorySlug': blog_post.category.slug,'productSlug': blog_post.slug}) }}" title="{{ blog_post.name }}">{{ blog_post.name }}</h2>
                         <div class="postAuthor">
-                            {% if blog_post.author %}
-                                <a href="{{ path('author',{'slug': blog_post.author.slug}) }}"><img class="smallAvatar" src="{{ asset(blog_post.author.getTargetImageUrl()~'/'~blog_post.author.image) }}" alt="{{ blog_post.author.name }}"> {{ blog_post.author.name }}</a> <span>{{ blog_post.updatedAt|date('d F Y')  }}</span>
+                            {% if blog_post.user %}
+                                <a href="{{ path('user',{'slug': blog_post.user.slug}) }}"><img class="smallAvatar" src="{{ asset(blog_post.user.getTargetImageUrl()~'/'~blog_post.user.image) }}" alt="{{ blog_post.user.name }}"> {{ blog_post.user.name }}</a> <span>{{ blog_post.updatedAt|date('d F Y')  }}</span>
                                 <br>
                                 <a href="{{ path('category',{'slug': blog_post.category.slug}) }}">{{ blog_post.category.name }}</a>
                             {% endif %}

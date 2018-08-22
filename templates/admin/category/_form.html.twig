@@ -7,7 +7,7 @@
     {% if category.image is not empty %}
         <div class="text-center">
             <div class="imgWrap">
-                    <img src="{{ asset('images/categories/' ~ category.image.filename) }}" class="img-fluid img-thumbnail">
+                    <img src="{{ asset('images/categories/' ~ category.image) }}" class="img-fluid img-thumbnail">
                 <div class="imgDelWrap">
                     {{ include('admin/category/_delete_image_form.html.twig') }}
                 </div>

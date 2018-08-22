@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class AuthorController extends AbstractController
+class UserController extends AbstractController
 {
     /**
      * @var BlogService
@@ -29,7 +29,7 @@ class AuthorController extends AbstractController
     }
 
     /**
-     * @Route("/author/{slug}.html", name="author", requirements={"slug"="[A-Za-z0-9\-]+"})
+     * @Route("/user/{slug}.html", name="user", requirements={"slug"="[A-Za-z0-9\-]+"})
      * @param $slug
      *
      * @return Response
@@ -38,21 +38,21 @@ class AuthorController extends AbstractController
     {
         $page = (int)$request->query->get('page',1);
 
-        $author = $this->blogService->findOneAuthorBySlug($slug);
-        if(empty($author)){
-            throw new NotFoundHttpException('Something went wrong. Category not found');
+        $user = $this->blogService->findOneUserBySlug($slug);
+        if(empty($user)){
+            throw new NotFoundHttpException('Something went wrong. User not found');
         }
         $orderBy = [];
         $orderBy['createdAt'] = 'ASC';
         $orderBy['id'] = 'ASC';
-        $postData = $this->blogService->getAllPostByAuthorPaginator($author,true,true,true,true,false,$page,Globals::getPaginatorPageSize(),$orderBy);
-        return $this->render('author/show.html.twig', [
+        $postData = $this->blogService->getAllPostByUserPaginator($user,true,true,true,true,false,$page,Globals::getPaginatorPageSize(),$orderBy);
+        return $this->render('user/show.html.twig', [
             'posts' => $postData['posts'],
             'totalItems' => $postData['totalItems'],
             'page' => $page,
-            'author' => $author,
+            'user' => $user,
             'pagesCount' => $postData['pagesCount'],
-            'title' => $author->getName(),
+            'title' => $user->getName(),
         ]);
     }
 }

@@ -59,7 +59,7 @@ class BlogPostType extends AbstractType
                 'data_class' => null,
                 'required' => false,
             ])/**/
-            ->add('author')
+            ->add('user')
             ->add('category')
             ->add('status',ChoiceType::class,[
                 'attr' => ['class' => 'statusPost'],

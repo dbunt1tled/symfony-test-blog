@@ -74,7 +74,7 @@ class Image
         return $this;
     }
 
-    public function getFile(): UploadedFile
+    public function getFile(): ?UploadedFile
     {
         return $this->file;
     }

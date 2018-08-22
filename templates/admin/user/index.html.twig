@@ -25,18 +25,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for author in authors %}
+                {% for user in users %}
                     <tr>
-                        <td>{{ author.id }}</td>
-                        <td>{{ author.name }}</td>
-                        <td>{{ author.job }}</td>
-                        <td>{{ author.email }}</td>
-                        <td>{{ author.phone }}</td>
-                        <td>{{ author.shortBio }}</td>
-                        <td>{{ author.role ? author.role|join(', ') : '' }}</td>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.job }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.phone }}</td>
+                        <td>{{ user.shortBio }}</td>
+                        <td>{{ user.role ? user.role|join(', ') : '' }}</td>
                         <td>
-                            {#<a href="{{ path('admin_author_show', {'id': author.id}) }}">show</a>#}
-                            <a class="btn btn-primary" href="{{ path('admin_author_edit', {'id': author.id}) }}"><i class="fa fa-edit"></i></a>
+                            {#<a href="{{ path('admin_user_show', {'id': user.id}) }}">show</a>#}
+                            <a class="btn btn-primary" href="{{ path('admin_user_edit', {'id': user.id}) }}"><i class="fa fa-edit"></i></a>
                         </td>
                     </tr>
                 {% else %}
@@ -47,6 +47,6 @@
                 </tbody>
             </table>
         </div>
-        {{ wPaginator(authors, totalItems, pagesCount, page) }}
+        {{ wPaginator(users, totalItems, pagesCount, page) }}
     </div>
 {% endblock %}

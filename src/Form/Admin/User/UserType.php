@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Form\Admin\Author;
+namespace App\Form\Admin\User;
 
-use App\Entity\Author;
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AuthorType extends AbstractType
+class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -34,7 +34,7 @@ class AuthorType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Author::class,
+            'data_class' => User::class,
         ]);
     }
 }

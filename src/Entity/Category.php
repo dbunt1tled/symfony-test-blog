@@ -10,12 +10,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation\AccessType;
 
 /**
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="category")
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @ORM\HasLifecycleCallbacks()
+ *
+ *
+ * @AccessType("public_method")
  */
 class Category
 {
@@ -28,6 +33,7 @@ class Category
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Serializer\Expose()
      */
     private $id;
 
@@ -55,18 +61,21 @@ class Category
     /**
      * @Gedmo\TreeLeft
      * @ORM\Column(type="integer")
+     * @Serializer\Exclude()
      */
     private $lft;
 
     /**
      * @Gedmo\TreeLevel
      * @ORM\Column(type="integer")
+     * @Serializer\Exclude()
      */
     private $lvl;
 
     /**
      * @Gedmo\TreeRight
      * @ORM\Column(type="integer")
+     * @Serializer\Exclude()
      */
     private $rgt;
 
@@ -74,6 +83,7 @@ class Category
      * @Gedmo\TreeRoot
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @Serializer\Exclude()
      */
     private $root;
 
@@ -81,17 +91,20 @@ class Category
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @Serializer\Exclude()
      */
     private $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
      * @ORM\OrderBy({"lft" = "ASC"})
+     * @Serializer\Exclude()
      */
     private $children;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="category")
+     * @Serializer\Exclude()
      */
     private $blogPosts;
 
@@ -105,6 +118,17 @@ class Category
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return Category
+     */
+    public function setId($id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getName(): ?string

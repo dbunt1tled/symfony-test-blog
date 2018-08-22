@@ -29,7 +29,7 @@
                     <tr>
                         <td>{{ category.id }}</td>
                         <td>{{ category.name }}</td>
-                        <td class="text-center">{% if category.image %}<img src="{{ asset('images/categories/' ~ category.image.filename) }}" class="img-thumbnail w-50">{% endif %}</td>
+                        <td class="text-center">{% if category.image %}<img src="{{ asset('images/categories/' ~ category.image) }}" class="img-thumbnail w-50">{% endif %}</td>
                         <td>{{ category.description|length > 50 ? category.description|slice(0, 51)|split(' ')|slice(0, -1)|join(' ') ~ '…' : category.description }}</td>
                         <td>{{ category.parent ? category.parent.name : '' }}</td>
                         <td>{{ category.createdAt ? category.createdAt|date('d F Y') : '' }}</td>

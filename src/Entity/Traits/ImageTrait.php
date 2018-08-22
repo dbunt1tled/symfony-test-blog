@@ -70,9 +70,9 @@ trait ImageTrait
      */
     public function postLoad()
     {
-        if ($fileName = $this->getImage()) {
+        /*if ($fileName = $this->getImage()) {
             $this->setImage(new File($this->getTargetDirectory().'/'.$fileName));
-        }
+        }/**/
     }
 
     /**

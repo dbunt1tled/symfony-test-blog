@@ -33,7 +33,7 @@
                         <td>{{ blog_post.name }}</td>
                         <td>{{ blog_post.description[:30] ~ (blog_post.description|length > 30 ? '...') }}</td>
                         <td>{{ blog_post.body|length > 50 ? blog_post.body|slice(0, 51)|split(' ')|slice(0, -1)|join(' ') ~ '…' : blog_post.body }}</td>
-                        <td>{{ blog_post.author ? blog_post.author.name : '' }}</td>
+                        <td>{{ blog_post.user ? blog_post.user.name : '' }}</td>
                         <td>{{ blog_post.category ? blog_post.category.name : '' }}</td>
                         <td>{{ blog_post.createdAt ? blog_post.updatedAt|date('d F Y') : '' }}</td>
                         <td>{{ blog_post.status }}</td>

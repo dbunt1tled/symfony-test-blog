@@ -1,0 +1,58 @@
+<RestClientRequest>
+  <option name="biscuits">
+    <list />
+  </option>
+  <option name="httpMethod" value="GET" />
+  <option name="urlBase" value="http://symfony.local" />
+  <option name="urlPath" value="oauth/v2/token" />
+  <option name="headers">
+    <list>
+      <KeyValuePair>
+        <option name="key" value="Accept" />
+        <option name="value" value="*/*" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Cache-Control" />
+        <option name="value" value="no-cache" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Content-Type" />
+        <option name="value" value="application/json" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Accept" />
+        <option name="value" value="application/json" />
+      </KeyValuePair>
+    </list>
+  </option>
+  <option name="parameters">
+    <list>
+      <KeyValuePair>
+        <option name="key" value="client_id" />
+        <option name="value" value="1_400149s80ykggkcc4w4kc408kg080o88s84wsockw4sscwgcgg" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="client_secret" />
+        <option name="value" value="4po3y1xx5uecwk08ookwg0k4skwgswco4wc0ks0ssckk4kwsgk" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="grant_type" />
+        <option name="value" value="password" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="username" />
+        <option name="value" value="sidni@i.ua" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="password" />
+        <option name="value" value="12345678" />
+      </KeyValuePair>
+    </list>
+  </option>
+  <option name="parametersEnabled" value="true" />
+  <option name="haveTextToSend" value="false" />
+  <option name="haveFileToSend" value="false" />
+  <option name="isFileUpload" value="false" />
+  <option name="textToSend" value="" />
+  <option name="filesToSend" value="" />
+</RestClientRequest>

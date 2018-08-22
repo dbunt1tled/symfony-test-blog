@@ -10,7 +10,7 @@ parameters:
     images_url_directory: '/images'
     blog_posts_files_directory: '/posts'
     categories_files_directory: '/categories'
-    authors_files_directory: '/authors'
+    authors_files_directory: '/users'
     paginator_page_size: 20
     main.twig.w_bread_crumb.home.route: home
     main.twig.w_bread_crumb.home.label: Home
@@ -61,6 +61,20 @@ services:
             - []
             - '@logger'
             - '@session.flash_bag'
+    #circular_reference_handler:
+    #    public: false
+    #    class: callback
+    #    factory: [App\Utils\CircularHandlerFactory, getId]
+    #serializer.normalizer.object:
+    #    class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
+    #    arguments: ["@serializer.mapping.class_metadata_factory", null, "@serializer.property_accessor"]
+    #    public: false
+    #    tags: [serializer.normalizer]
+    #    calls:
+    #    -   method: setCircularReferenceLimit
+    #        arguments: [1]
+    #    -   method: setCircularReferenceHandler
+    #        arguments: ["@circular_reference_handler"]
 
 #    App\Repository\CategoryRepository:
 #        arguments:
@@ -70,7 +84,7 @@ services:
         arguments:
             $em: '@doctrine.orm.entity_manager'
             #$postRepository: '@App\Repository\BlogPostRepository'
-            #$authorRepository:  '@App\Repository\AuthorRepository'
+            #$userRepository:  '@App\Repository\UserRepository'
             #$imageRepository: '@App\Repository\ImageRepository'
             #$categoryRepository: '@App\Repository\CategoryRepository'
 
@@ -91,6 +105,34 @@ services:
             $homeRoute: '%main.twig.w_bread_crumb.home.route%'
             $homeLabel: '%main.twig.w_bread_crumb.home.label%'
 
+    FOS\OAuthServerBundle\Model\AccessTokenManagerInterface:
+        alias: fos_oauth_server.access_token_manager.default
+        public: true
+
+    FOS\OAuthServerBundle\Model\AuthCodeManagerInterface:
+        alias: fos_oauth_server.auth_code_manager.default
+        public: true
+
+    FOS\OAuthServerBundle\Model\ClientManagerInterface:
+        alias: fos_oauth_server.client_manager.default
+        public: true
+
+    FOS\OAuthServerBundle\Model\RefreshTokenManagerInterface:
+        alias: fos_oauth_server.refresh_token_manager.default
+        public: true
+
+    platform.user.manager:
+        class: Doctrine\ORM\EntityManager
+        factory: ['@doctrine','getManagerForClass']
+        arguments: ['App\Entity\User']
+    platform.user.repository:
+        class: App\Repository\UserRepository
+        factory: ['@platform.user.manager','getRepository']
+        arguments: ['App\Entity\User']
+    platform.user.provider:
+        class: App\Utils\Provider\UserProvider
+        arguments: ['@platform.user.repository']
+
 
 #    App\EventListener\ImageUploadListener:
 #        tags:
@@ -98,6 +140,6 @@ services:
 #        - { name: doctrine.event_listener, event: preUpdate }
 #        - { name: doctrine.event_listener, event: postLoad }
 
-#   App\Repository\AuthorRepository:
+#   App\Repository\UserRepository:
 #       arguments:
 #           $em: '@Doctrine\ORM\EntityManagerInterface'

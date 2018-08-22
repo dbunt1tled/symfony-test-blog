@@ -1,6 +1,17 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+fos_oauth_server_token:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
+
+fos_oauth_server_authorize:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
+
+rest_api_v1:
+    resource: ../src/Controller/Rest/v1/
+    type: annotation
+    prefix: /api/v1
 auth:
     resource: 'App\Controller\AuthController'
     type: annotation
@@ -10,8 +21,8 @@ index:
 category:
     resource: 'App\Controller\CategoryController'
     type: annotation
-author:
-    resource: 'App\Controller\AuthorController'
+user:
+    resource: 'App\Controller\UserController'
     type: annotation
 blog:
     resource: 'App\Controller\BlogController'
