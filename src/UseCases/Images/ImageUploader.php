@@ -48,4 +48,28 @@ class ImageUploader
             $entity->setImage($fileName);
         }
     }
+    
+    /**
+     * @param string $originalFilePath
+     * @param string $fileName
+     *
+     * @return UploadedFile
+     * @throws \Exception
+     */
+    public function getPutFile(string $originalFilePath,string $fileName = 'image')
+    {
+        if(!($content = file_get_contents("php://input"))) {
+            throw new \Exception('Image not found in request');
+        }
+        file_put_contents($originalFilePath, $content);
+    
+        $info = pathinfo($fileName);
+        $mime = mime_content_type($originalFilePath);
+        $filename = $fileName;
+        $extension = explode('/', $mime )[1];
+        if(!isset($info["extension"]) || (mb_strtolower($info["extension"]) !== $extension)) {
+            $filename .= '.'.$extension;
+        }
+        return new UploadedFile($originalFilePath, $filename, $mime, null, null, true);
+    }
 }

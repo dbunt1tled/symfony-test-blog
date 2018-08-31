@@ -20,12 +20,12 @@ class FileUploader
         }else{
             $originalName = (string) $nameForFile;
         }
-        $fileName = $this->slug($originalName).'.'.$file->guessExtension();
+        $fileName = $this->slug($originalName).'.'.$file->getClientOriginalExtension();
         $file->move($targetDirectory, $fileName);
         return $fileName;
     }
 
-    private function slug($slug) {
+    public function slug($slug) {
         $name = $slug;
         $slug = transliterator_transliterate(
             'Any-Latin; Latin-ASCII; [:Nonspacing Mark:] Remove; [:Punctuation:] Remove; Lower();',

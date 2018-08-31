@@ -33,11 +33,11 @@ trait SlugTrait
     }
 
     /**
-     * @param string $slug
+     * @param string|null $slug
      *
      * @return SlugTrait
      */
-    public function setSlug(string $slug): self
+    public function setSlug($slug): self
     {
         $this->slug = $slug;
         return $this;

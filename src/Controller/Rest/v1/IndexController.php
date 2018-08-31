@@ -2,16 +2,20 @@
 
 namespace App\Controller\Rest\v1;
 
+
+use App\Controller\Rest\v1\Resource\CategoryDetailResource;
+use App\Entity\Category;
 use App\UseCases\Blog\BlogService;
 use App\Utils\Globals;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-class HomeController extends FOSRestController
+class IndexController extends FOSRestController
 {
     /**
      * @var BlogService
@@ -49,24 +53,10 @@ class HomeController extends FOSRestController
      */
     public function version(): View
     {
-
-        return View::create(['TEST'],Response::HTTP_OK)->setFormat('json');
-
-        return $this->handleView($a);
-        dump($a);
-        die("\n");
-        return 1;
-
-        /*$orderBy = [];
-        $orderBy['createdAt'] = 'ASC';
-        $orderBy['id'] = 'ASC';
-        $postData = $this->blogService->getAllPostPaginator(true,true,true,true,false,$page,Globals::getPaginatorPageSize(),$orderBy);
-        return $this->render('home/index.html.twig', [
-            'posts' => $postData['posts'],
-            'totalItems' => $postData['totalItems'],
-            'page' => $page,
-            'pagesCount' => $postData['pagesCount'],
-            'title' => 'Main Page',
-        ]);/**/
+        $composerData = JSON::decode(\file_get_contents(__DIR__ . '/../../composer.json'));
+        $data = [
+            'version' => $composerData->version,
+        ];
+        return View::create($data,Response::HTTP_OK)->setFormat('json');
     }
 }

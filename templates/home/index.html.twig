@@ -47,5 +47,50 @@
                         facilisis neque tincidunt vel. Maecenas vel felis vel turpis scelerisque eleifend. Fusce nec purus egestas,
                         efficitur nisi ac, ultrices nulla. Pellentesque eu mollis tortor, in mollis nisl. Maecenas rhoncus quam non
                         lacinia mollis.</p>
+
+        <form name="form1" id="form1">
+            <div class="form-group">
+                <label for="name">Email address</label>
+                <input type="text" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Enter name">
+                <small id="nameHelp" class="form-text text-muted">Name for category.</small>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" placeholder="Enter Description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">File</label>
+                <input type="file" class="form-control" name="image" id="image">
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="status" name="status">
+                <label class="form-check-label" for="status">Status</label>
+            </div>
+            <button type="submit" id="sendForm" class="btn btn-primary">Submit</button>
+        </form>
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('body').on('submit','form#form1',function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: "{{ path('api_category_create') }}",
+                type: 'POST',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer MTMxYTc4YzM0YjNlM2YxOGRjOTE3MjBhMTVmODIwYzVhNDg1MWQ3ZGMzOWFhMzhlNzRkMDUzMmUxMGIzMmFkOA');
+                },
+                data: formData,
+                async: true,
+                success: function (data) {
+                    console.log(data);
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+    </script>
 {% endblock %}

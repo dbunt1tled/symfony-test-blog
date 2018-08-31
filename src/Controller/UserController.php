@@ -8,6 +8,7 @@
 
 namespace App\Controller;
 
+use App\Services\Security\Voters\ManageUserVoter;
 use App\UseCases\Blog\BlogService;
 use App\Utils\Globals;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,6 +40,7 @@ class UserController extends AbstractController
         $page = (int)$request->query->get('page',1);
 
         $user = $this->blogService->findOneUserBySlug($slug);
+        $this->denyAccessUnlessGranted(ManageUserVoter::VIEW, $user);
         if(empty($user)){
             throw new NotFoundHttpException('Something went wrong. User not found');
         }

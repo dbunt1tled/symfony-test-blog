@@ -12,10 +12,12 @@ use App\Entity\User;
 use App\Entity\BlogPost;
 use App\Entity\Category;
 use App\Entity\Image;
+use App\Repository\Factory\CategoryFactory;
 use App\Repository\UserRepository;
 use App\Repository\BlogPostRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\ImageRepository;
+use App\ValuesObject\Category\CategoryVO;
 use Doctrine\ORM\EntityManager;
 
 class BlogService
@@ -37,13 +39,18 @@ class BlogService
      * @var CategoryRepository
      */
     private $categoryRepository;
+    /**
+     * @var CategoryFactory
+     */
+    private $categoryFactory;
 
-    public function __construct(EntityManager $em/*, BlogPostRepository $postRepository, UserRepository $userRepository, ImageRepository $imageRepository, CategoryRepository $categoryRepository/**/)
+    public function __construct(EntityManager $em,CategoryFactory $categoryFactory/*, BlogPostRepository $postRepository, UserRepository $userRepository, ImageRepository $imageRepository, CategoryRepository $categoryRepository/**/)
     {
         $this->postRepository = $em->getRepository('App:BlogPost');/*$postRepository;/**/
         $this->userRepository = $em->getRepository('App:User');/*$userRepository;/**/
         $this->imageRepository = $em->getRepository('App:Image');/*$imageRepository;/**/
         $this->categoryRepository = $em->getRepository('App:Category');/*$categoryRepository;/**/
+        $this->categoryFactory = $categoryFactory;
     }
 
     /**
@@ -245,7 +252,7 @@ class BlogService
         return [
             'categories' => $categories,
             'totalItems' => $totalItems,
-            'pagesCount' => ceil($totalItems / $limit),
+            'pagesCount' => (int)ceil($totalItems / $limit),
         ];
     }
     public function getAllUserPaginator($page = 1, $limit = 20)
@@ -322,12 +329,19 @@ class BlogService
     {
         return $this->userRepository->find($userId);
     }
-
-    /**
-     * @return string
-     */
-    public function getUserRepositoryClassName()
+    public function findCategory(int $categoryId)
     {
-        return $this->userRepository->getClassName();
+        return $this->categoryRepository->find($categoryId);
     }
+    public function makeCategoryByVO($categoryVO)
+    {
+        $category = $this->categoryFactory->makeFromArray($categoryVO->toArray());
+        return $category;
+    }
+    public function updateCategoryByVO(Category $category,$categoryVO)
+    {
+        return $this->categoryFactory->updateFromArray($category,$categoryVO->toArray());
+
+    }
+
 }

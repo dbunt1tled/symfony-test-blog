@@ -83,11 +83,14 @@ services:
     App\UseCases\Blog\BlogService:
         arguments:
             $em: '@doctrine.orm.entity_manager'
+            $categoryFactory: '@App\Repository\Factory\CategoryFactory'
             #$postRepository: '@App\Repository\BlogPostRepository'
             #$userRepository:  '@App\Repository\UserRepository'
             #$imageRepository: '@App\Repository\ImageRepository'
             #$categoryRepository: '@App\Repository\CategoryRepository'
-
+    App\Repository\Factory\CategoryFactory:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
     App\Services\Widgets\WPaginator\WPaginator:
         arguments:
             $container: '@service_container'

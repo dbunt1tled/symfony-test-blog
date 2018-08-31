@@ -60,7 +60,9 @@ trait ImageTrait
          * @var File $file
          */
         $file = $this->getImage();
-        unlink($file->getRealPath());
+        if(!empty($file)) {
+            unlink($this->getTargetDirectory().'/'.$file);
+        }
         $this->setImage('');
         return $this;
     }

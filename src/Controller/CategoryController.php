@@ -8,6 +8,7 @@
 
 namespace App\Controller;
 
+use App\Services\Security\Voters\ManageCategoryVoter;
 use App\UseCases\Blog\BlogService;
 use App\Utils\Globals;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,6 +42,7 @@ class CategoryController extends AbstractController
         if(empty($category)){
             throw new NotFoundHttpException('Something went wrong. Category not found');
         }
+        $this->denyAccessUnlessGranted(ManageCategoryVoter::VIEW, $category);
         $orderBy = [];
         $orderBy['createdAt'] = 'ASC';
         $orderBy['id'] = 'ASC';

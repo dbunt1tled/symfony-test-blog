@@ -25,9 +25,16 @@ security:
 
         oauth_authorize:
             pattern:    ^/oauth/v2/auth
-            security:   false
             anonymous: true
+            provider: chain_providers
             # Add your favorite authentication process here
+            #security:   false
+        api:
+            pattern:    ^/api
+            fos_oauth:  true
+            stateless:  true
+            provider: chain_providers
+            anonymous:  true # note that anonymous access is now enabled
 
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -70,6 +77,7 @@ security:
          - { path: ^/admin, roles: [ROLE_MODERATOR] }
          - { path: ^/administrator, roles: [ROLE_MODERATOR] }
          - { path: ^/profile, roles: ROLE_USER }
+         #- { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
     role_hierarchy:
             ROLE_MODERATOR: [ROLE_USER]
             ROLE_ADMIN: [ROLE_USER,ROLE_MODERATOR,ROLE_ALLOWED_TO_SWITCH,ROLE_PREVIOUS_ADMIN]

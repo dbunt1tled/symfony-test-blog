@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "399870b5b52271af594f45f4e1d73882",
+    "content-hash": "17fbef6b84380d3858a1bb2b0a7a547c",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -7759,10 +7759,10 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "friendsofsymfony/rest-bundle": 20,
-        "symfony/lts": 20,
         "friendsofsymfony/oauth-server-bundle": 20,
-        "nelmio/api-doc-bundle": 20
+        "friendsofsymfony/rest-bundle": 20,
+        "nelmio/api-doc-bundle": 20,
+        "symfony/lts": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

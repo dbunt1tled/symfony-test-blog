@@ -25,19 +25,20 @@ class CategoryRepository extends NestedTreeRepository/*ServiceEntityRepository /
 
     private $alias = 'ct';
 
-    /*
+   /*
     public function __construct(RegistryInterface $registry)
     {
         $entityClass = Category::class;
         $manager = $registry->getManagerForClass($entityClass);
         //$registry->getEntityManager()
         parent::__construct($manager, $manager->getClassMetadata($entityClass));
-    }/**
-
+    }/**/
+    
     /**
      * @param Category $category
      *
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function save(Category $category)
     {

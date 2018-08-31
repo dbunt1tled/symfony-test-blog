@@ -2,6 +2,15 @@
 fos_rest:
     param_fetcher_listener:  true
     allowed_methods_listener:  true
+    body_listener:
+        decoders:
+            json: fos_rest.decoder.jsontoform
+    body_converter:
+        enabled: true
+        validate: true
+        validation_errors_argument: validationErrors
+    serializer:
+        serialize_null: true
     routing_loader:
         default_format: json
         include_format: false

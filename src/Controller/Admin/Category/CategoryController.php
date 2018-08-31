@@ -51,12 +51,13 @@ class CategoryController extends Controller
             'pagesCount' => $categoryData['pagesCount'],
         ]);
     }
-
+    
     /**
      * @Route("/new", name="admin_category_new", methods="GET|POST")
      * @param Request $request
      *
      * @return Response
+     * @throws \Doctrine\ORM\ORMException
      */
     public function new(Request $request): Response
     {
@@ -65,11 +66,8 @@ class CategoryController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $this->uploader->uploadFile($category);
-            $em->persist($category);
-            $em->flush();
-
+            $this->blogService->saveCategory($category);
             return $this->redirectToRoute('admin_category_edit', ['id' => $category->getId()]);
         }
 
@@ -89,13 +87,14 @@ class CategoryController extends Controller
     {
         return $this->render('admin/category/show.html.twig', ['category' => $category]);
     }
-
+    
     /**
      * @Route("/{id}/edit", name="admin_category_edit", methods="GET|POST")
      * @param Request  $request
      * @param Category $category
      *
      * @return Response
+     * @throws \Doctrine\ORM\ORMException
      */
     public function edit(Request $request, Category $category): Response
     {
@@ -103,7 +102,7 @@ class CategoryController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->uploader->uploadFile($category);
-            $this->getDoctrine()->getManager()->flush();
+            $this->blogService->saveCategory($category);
             return $this->redirectToRoute('admin_category_edit', ['id' => $category->getId()]);
         }
 

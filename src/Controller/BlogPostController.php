@@ -8,6 +8,7 @@
 
 namespace App\Controller;
 
+use App\Services\Security\Voters\ManageBlogPostVoter;
 use App\UseCases\Blog\BlogService;
 use App\Utils\Globals;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +39,7 @@ class BlogPostController extends AbstractController
     public function show($categorySlug, $productSlug)
     {
         $blog_post = $this->blogService->findOnePostBySlug($productSlug);
+        $this->denyAccessUnlessGranted(ManageBlogPostVoter::VIEW, $blog_post);
         $category = $this->blogService->findOneCategoryBySlug($categorySlug);
         if(!$blog_post || !$category || ($blog_post->getCategory() != $category) ) {
             throw new NotFoundHttpException('Something went wrong. Post not Found');
