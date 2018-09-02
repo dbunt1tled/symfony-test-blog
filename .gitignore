@@ -29,3 +29,4 @@ yarn-error.log
 src/DataFixtures/Blog/images/user/tmp/*
 src/DataFixtures/Blog/images/category/tmp/*
 src/DataFixtures/Blog/images/post/tmp/*
+src/Command/ApiRequests/*
