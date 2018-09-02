@@ -1,7 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ blog_post.name }}{% endblock %}
 {% block breadcrumbs %}
-    {{ WBreadCrumb(blog_post.category.name, path('category',{'slug': blog_post.category.slug})) }}
+    {% if breadCrumbs|length > 0 %}
+        {% for bread in breadCrumbs %}
+            {{ WBreadCrumb(bread.name,path('category',{'slug': bread.slug})) }}
+        {% endfor %}
+    {% endif %}
     {{ WBreadCrumb(blog_post.name) }}
 {% endblock%}
 {% block body %}

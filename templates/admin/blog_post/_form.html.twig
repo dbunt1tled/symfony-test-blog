@@ -7,7 +7,7 @@
     {{ form_row(form.body) }}
     {% set images = blog_post.getImages() %}
     {% if images is not empty %}
-        <div class="text-center">
+        <div class="text-center imgRow form-group row">
             {% for image in images %}
                 <div class="imgWrap">
                     <img src="{{ asset(image.getWebPath()) }}" class="img-fluid img-thumbnail">

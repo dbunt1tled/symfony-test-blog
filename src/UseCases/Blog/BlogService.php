@@ -371,7 +371,11 @@ class BlogService
     public function updateCategoryByVO(Category $category,$categoryVO)
     {
         return $this->categoryFactory->updateFromArray($category,$categoryVO->toArray());
-
     }
-
+    
+    public function categoryBreadcrumbs(Category $category)
+    {
+        $breadcrumbs = $this->categoryRepository->categoryBreadcrumbs($category);
+        return $breadcrumbs;
+    }
 }

@@ -36,7 +36,7 @@
                         </div>
                     </header>
                     <article class="post">
-                        {{ blog_post.description }}
+                        {{ blog_post.description|raw }}
 
                         {% set image = blog_post.getImage() %}
                         {% if image is not empty %}

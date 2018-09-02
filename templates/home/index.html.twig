@@ -34,7 +34,7 @@
                         </div>
                     </header>
                     <article class="post">
-                        {{ blog_post.description }}
+                        {{ blog_post.description|raw }}
 
                         {% set image = blog_post.getImage() %}
                         {% if image is not empty %}
@@ -60,7 +60,7 @@
                         efficitur nisi ac, ultrices nulla. Pellentesque eu mollis tortor, in mollis nisl. Maecenas rhoncus quam non
                         lacinia mollis.</p>
 
-        <form name="form1" id="form1">
+        <!--form name="form1" id="form1">
             <div class="form-group">
                 <label for="name">Email address</label>
                 <input type="text" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Enter name">
@@ -79,12 +79,12 @@
                 <label class="form-check-label" for="status">Status</label>
             </div>
             <button type="submit" id="sendForm" class="btn btn-primary">Submit</button>
-        </form>
+        </form-->
     </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script>
+    <!--script>
         $('body').on('submit','form#form1',function (e) {
             e.preventDefault();
             var formData = new FormData(this);
@@ -104,5 +104,5 @@
                 processData: false
             });
         });
-    </script>
+    </script-->
 {% endblock %}

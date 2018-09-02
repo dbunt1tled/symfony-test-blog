@@ -1,7 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ title }}{% endblock %}
 {% block breadcrumbs %}
-    {{ WBreadCrumb(category.name) }}
+    {% if breadCrumbs|length > 0 %}
+        {% for bread in breadCrumbs %}
+            {{ WBreadCrumb(bread.name,path('category',{'slug': bread.slug})) }}
+        {% endfor %}
+    {% endif %}
 {% endblock%}
 {% block body %}
     {% if page == 1 %}
@@ -11,7 +15,7 @@
                 <img class="img-thumbnail" src="{{ asset(category.getTargetImageUrl()~'/'~category.image) }}">
             </div>
             <div class="col-9">
-                {{ category.description }}
+                {{ category.description|raw }}
             </div>
             <div class="col-12">{{ WCategoriesChildren(category) }}</div>
         </div>
@@ -46,7 +50,7 @@
                         </div>
                     </header>
                     <article class="post">
-                        {{ blog_post.description }}
+                        {{ blog_post.description|raw }}
 
                         {% set image = blog_post.getImage() %}
                         {% if image is not empty %}

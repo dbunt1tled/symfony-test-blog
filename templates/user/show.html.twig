@@ -44,7 +44,7 @@
                         </div>
                     </td>
                     <td><a  href="{{ path('product',{'categorySlug': blog_post.category.slug,'productSlug': blog_post.slug}) }}" title="{{ blog_post.name }}">{{ blog_post.name }}</a></td>
-                    <td>{{ blog_post.description }}</td>
+                    <td>{{ blog_post.description|raw }}</td>
                 </tr>
             {% endfor %}
         </table>

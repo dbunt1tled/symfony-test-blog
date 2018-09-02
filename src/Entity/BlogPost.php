@@ -80,7 +80,10 @@ class BlogPost
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="blogPost", cascade={"persist", "merge", "detach"})
-     * @ORM\JoinTable(name="tag_blog_post")
+     * @ORM\JoinTable(name="tag_blog_post",
+     *   joinColumns={@ORM\JoinColumn(name="blog_post_id", referencedColumnName="id")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
+     * )
      */
     private $tags;
 

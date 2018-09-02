@@ -7,8 +7,14 @@ main{
 .imgWrap,.imgDelWrap{
   display: inline-block;
 }
+.imgRow {
+  height: 150px;
+}
 .imgWrap{
   position: relative;
+}
+.imgRow img{
+  height: 150px;
 }
 .imgDelWrap{
   position: absolute;

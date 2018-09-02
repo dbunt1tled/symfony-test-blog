@@ -43,12 +43,14 @@ class CategoryController extends AbstractController
             throw new NotFoundHttpException('Something went wrong. Category not found');
         }
         $this->denyAccessUnlessGranted(ManageCategoryVoter::VIEW, $category);
+        $breadCrumbs = $this->blogService->categoryBreadcrumbs($category);
         $orderBy = [];
         $orderBy['createdAt'] = 'ASC';
         $orderBy['id'] = 'ASC';
         $postData = $this->blogService->getAllPostByCategoryPaginator($category,true,true,true,true,true,false,$page,Globals::getPaginatorPageSize(),$orderBy);
         return $this->render('category/show.html.twig', [
             'posts' => $postData['posts'],
+            'breadCrumbs' => $breadCrumbs,
             'totalItems' => $postData['totalItems'],
             'page' => $page,
             'category' => $category,

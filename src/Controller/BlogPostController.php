@@ -44,6 +44,7 @@ class BlogPostController extends AbstractController
         if(!$blog_post || !$category || ($blog_post->getCategory() != $category) ) {
             throw new NotFoundHttpException('Something went wrong. Post not Found');
         }
-        return $this->render('blog-post/show.html.twig',compact('blog_post','category'));
+        $breadCrumbs = $this->blogService->categoryBreadcrumbs($category);
+        return $this->render('blog-post/show.html.twig',compact('blog_post','category','breadCrumbs'));
     }
 }
