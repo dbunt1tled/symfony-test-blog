@@ -8,11 +8,13 @@
 
 namespace App\UseCases\Blog;
 
+use App\Entity\Tag;
 use App\Entity\User;
 use App\Entity\BlogPost;
 use App\Entity\Category;
 use App\Entity\Image;
 use App\Repository\Factory\CategoryFactory;
+use App\Repository\TagRepository;
 use App\Repository\UserRepository;
 use App\Repository\BlogPostRepository;
 use App\Repository\CategoryRepository;
@@ -40,6 +42,10 @@ class BlogService
      */
     private $categoryRepository;
     /**
+     * @var TagRepository
+     */
+    private $tagRepository;
+    /**
      * @var CategoryFactory
      */
     private $categoryFactory;
@@ -50,6 +56,7 @@ class BlogService
         $this->userRepository = $em->getRepository('App:User');/*$userRepository;/**/
         $this->imageRepository = $em->getRepository('App:Image');/*$imageRepository;/**/
         $this->categoryRepository = $em->getRepository('App:Category');/*$categoryRepository;/**/
+        $this->tagRepository = $em->getRepository('App:Tag');/*$tagRepository;/**/
         $this->categoryFactory = $categoryFactory;
     }
 
@@ -215,9 +222,9 @@ class BlogService
     }
 
 
-    public function getAllPostPaginator($withUser = false, $withCategory = false, $withImages = false, $addSelectUser = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    public function getAllPostPaginator($withUser = false, $withCategory = false, $withImages = false, $withTags = false, $addSelectUser = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
     {
-        $posts = $this->postRepository->getAllPostPaginator($withUser, $withCategory,$withImages, $addSelectUser, $active, $page, $limit, $orderBy);
+        $posts = $this->postRepository->getAllPostPaginator($withUser, $withCategory,$withImages, $withTags, $addSelectUser, $active, $page, $limit, $orderBy);
         $totalItems = count($posts);
         return [
             'posts' => $posts,
@@ -225,9 +232,9 @@ class BlogService
             'pagesCount' => ceil($totalItems / $limit),
         ];
     }
-    public function getAllPostByCategoryPaginator(Category $category, $withUser = false, $withCategory = false, $withImages =false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    public function getAllPostByCategoryPaginator(Category $category, $withUser = false, $withCategory = false, $withImages =false, $withTags = false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
     {
-        $posts = $this->postRepository->getAllPostByCategoryPaginator($category, $withUser, $withCategory, $withImages, $addSelect, $active, $page, $limit, $orderBy);
+        $posts = $this->postRepository->getAllPostByCategoryPaginator($category, $withUser, $withCategory, $withImages, $withTags, $addSelect, $active, $page, $limit, $orderBy);
         $totalItems = count($posts);
         return [
             'posts' => $posts,
@@ -235,9 +242,19 @@ class BlogService
             'pagesCount' => ceil($totalItems / $limit),
         ];
     }
-    public function getAllPostByUserPaginator(User $user, $withUser = false, $withCategory = false, $withImages =false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    public function getAllPostByTagPaginator(Tag $tag, $withUser = false, $withCategory = false, $withImages =false, $withTags = false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
     {
-        $posts = $this->postRepository->getAllPostByUserPaginator($user, $withUser, $withCategory, $withImages, $addSelect, $active, $page, $limit, $orderBy);
+        $posts = $this->postRepository->getAllPostByTagPaginator($tag, $withUser, $withCategory, $withImages, $withTags, $addSelect, $active, $page, $limit, $orderBy);
+        $totalItems = count($posts);
+        return [
+            'posts' => $posts,
+            'totalItems' => $totalItems,
+            'pagesCount' => ceil($totalItems / $limit),
+        ];
+    }
+    public function getAllPostByUserPaginator(User $user, $withUser = false, $withCategory = false, $withImages =false, $withTags = false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    {
+        $posts = $this->postRepository->getAllPostByUserPaginator($user, $withUser, $withCategory, $withImages, $withTags, $addSelect, $active, $page, $limit, $orderBy);
         $totalItems = count($posts);
         return [
             'posts' => $posts,
@@ -284,6 +301,19 @@ class BlogService
     {
         return $this->categoryRepository->findOneBy(['slug' => $slug]);
     }
+    
+    
+    /**
+     * @param string $slug
+     *
+     * @return Tag|null
+     */
+    public function findOneTagBySlug($slug)
+    {
+        return $this->tagRepository->findOneBy(['slug' => $slug]);
+    }
+    
+    
     /**
      * @param string $slug
      *

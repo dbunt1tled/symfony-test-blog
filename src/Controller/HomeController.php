@@ -55,7 +55,7 @@ class HomeController extends AbstractController
         $orderBy = [];
         $orderBy['createdAt'] = 'ASC';
         $orderBy['id'] = 'ASC';
-        $postData = $this->blogService->getAllPostPaginator(true,true,true,true,false,$page,Globals::getPaginatorPageSize(),$orderBy);
+        $postData = $this->blogService->getAllPostPaginator(true,true,true,true,true,false,$page,Globals::getPaginatorPageSize(),$orderBy);
         return $this->render('home/index.html.twig', [
             'posts' => $postData['posts'],
             'totalItems' => $postData['totalItems'],

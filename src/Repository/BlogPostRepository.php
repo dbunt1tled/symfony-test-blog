@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Tag;
 use App\Entity\User;
 use App\Entity\BlogPost;
 use App\Entity\Category;
@@ -83,12 +84,12 @@ class BlogPostRepository extends ServiceEntityRepository
      *
      * @return Paginator
      */
-    public function getAllPostPaginator($withUser = false, $withCategory = false, $withImages =false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    public function getAllPostPaginator($withUser = false, $withCategory = false, $withImages =false, $withTags = false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
     {
         $page = $this->getPage($page);
         $limit = $this->getLimit($limit);
         $offset = $this->getOffset($page, $limit);
-        $qb = $this->buildPostsQuery($withUser,$withCategory,$withImages,$addSelect,$active);
+        $qb = $this->buildPostsQuery($withUser,$withCategory,$withImages,$withTags,$addSelect,$active);
         $qb =  $this->addOrderByArray($qb,$orderBy,$this->alias);
         $paginator = new Paginator($qb, $fetchJoinCollection = true);
         $paginator->getQuery()
@@ -110,12 +111,12 @@ class BlogPostRepository extends ServiceEntityRepository
      *
      * @return Paginator
      */
-    public function getAllPostByCategoryPaginator(Category $category, $withUser = false, $withCategory = false, $withImages =false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    public function getAllPostByCategoryPaginator(Category $category, $withUser = false, $withCategory = false, $withImages =false, $withTags = false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
     {
         $page = $this->getPage($page);
         $limit = $this->getLimit($limit);
         $offset = $this->getOffset($page, $limit);
-        $qb = $this->buildPostsQuery($withUser,$withCategory,$withImages,$addSelect,$active);
+        $qb = $this->buildPostsQuery($withUser,$withCategory,$withImages,$withTags,$addSelect,$active);
         $qb =  $this->addOrderByArray($qb,$orderBy,$this->alias);
         $qb->andWhere($this->alias.'.category = :category')
            ->setParameter('category', $category);
@@ -125,13 +126,41 @@ class BlogPostRepository extends ServiceEntityRepository
                   ->setMaxResults($limit);
         return  $paginator;
     }
-
-    public function getAllPostByUserPaginator(User $user, $withUser = false, $withCategory = false, $withImages =false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    /**
+     * @param Tag $tag
+     * @param bool  $withUser
+     * @param bool  $withCategory
+     * @param bool  $withImages
+     * @param bool  $addSelect
+     * @param bool  $active
+     * @param int   $page
+     * @param int   $limit
+     * @param array $orderBy
+     *
+     * @return Paginator
+     */
+    public function getAllPostByTagPaginator(Tag $tag, $withUser = false, $withCategory = false, $withImages =false, $withTags = false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
     {
         $page = $this->getPage($page);
         $limit = $this->getLimit($limit);
         $offset = $this->getOffset($page, $limit);
-        $qb = $this->buildPostsQuery($withUser,$withCategory,$withImages,$addSelect,$active);
+        $qb = $this->buildPostsQuery($withUser,$withCategory,$withImages,$withTags,$addSelect,$active);
+        $qb =  $this->addOrderByArray($qb,$orderBy,$this->alias);
+        $qb->andWhere(':tag MEMBER OF '.$this->alias.'.tags')
+           ->setParameter('tag', $tag);
+        $paginator = new Paginator($qb, $fetchJoinCollection = true);
+        $paginator->getQuery()
+                  ->setFirstResult($offset)
+                  ->setMaxResults($limit);
+        return  $paginator;
+    }
+
+    public function getAllPostByUserPaginator(User $user, $withUser = false, $withCategory = false, $withImages =false, $withTags = false, $addSelect = true, $active = true, $page = 1, $limit = 20, $orderBy = [])
+    {
+        $page = $this->getPage($page);
+        $limit = $this->getLimit($limit);
+        $offset = $this->getOffset($page, $limit);
+        $qb = $this->buildPostsQuery($withUser,$withCategory,$withImages,$withTags,$addSelect,$active);
         $qb =  $this->addOrderByArray($qb,$orderBy,$this->alias);
         $qb->andWhere($this->alias.'.user = :user')
            ->setParameter('user',$user);
@@ -151,13 +180,13 @@ class BlogPostRepository extends ServiceEntityRepository
      *
      * @return Query|mixed|BlogPost[]
      */
-    public function findAllPosts($withUser = false, $withCategory = false, $withImages =false, $active = true, $page = 1, $limit = 100,$returnQuery = false)
+    public function findAllPosts($withUser = false, $withCategory = false, $withImages =false, $withTags = false, $active = true, $page = 1, $limit = 100,$returnQuery = false)
     {
         $page = $this->getPage($page);
         $limit = $this->getLimit($limit);
         $offset = $this->getOffset($page, $limit);
 
-        $qb =  $this->buildPostsQuery($withUser,$withCategory,$withImages,$active);
+        $qb =  $this->buildPostsQuery($withUser,$withCategory,$withImages,$withTags,$active);
         $qb->setMaxResults($limit)->setFirstResult($offset);
 
         if($returnQuery){
@@ -166,9 +195,9 @@ class BlogPostRepository extends ServiceEntityRepository
         return $this->returnAll($qb);
     }
 
-    public function findAllPostsCount($withUser = false, $withCategory = false, $withImages =false, $active = true)
+    public function findAllPostsCount($withUser = false, $withCategory = false, $withImages =false, $withTags = false, $active = true)
     {
-        $qb =  $this->buildPostsQuery($withUser,$withCategory,$withImages,false,$active);
+        $qb =  $this->buildPostsQuery($withUser,$withCategory,$withImages,$withTags,false,$active);
         $qb->select('COUNT(' . $this->alias . ')');
         return $this->returnAll($qb,Query::HYDRATE_SINGLE_SCALAR);
     }
@@ -182,7 +211,7 @@ class BlogPostRepository extends ServiceEntityRepository
      *
      * @return QueryBuilder
      */
-    public function buildPostsQuery($withUser = false, $withCategory = false,$withImages =false, $addSelect = true, $active = true)
+    public function buildPostsQuery($withUser = false, $withCategory = false,$withImages =false, $withTags = false, $addSelect = true, $active = true)
     {
         $qb =  $this->createQueryBuilder($this->alias);
         if($withUser){
@@ -193,6 +222,9 @@ class BlogPostRepository extends ServiceEntityRepository
         }
         if($withImages){
             $this->joinImages($qb,$addSelect);
+        }
+        if($withTags){
+            $this->joinTags($qb,$addSelect);
         }
         if($active){
             $this->active($qb);
@@ -232,6 +264,14 @@ class BlogPostRepository extends ServiceEntityRepository
         $qb->leftJoin($this->alias.'.category','c');
         if($addSelect) {
             $qb->addSelect('c');
+        }
+        return $qb;
+    }
+    private function joinTags(QueryBuilder $qb, $addSelect = true)
+    {
+        $qb->leftJoin($this->alias.'.tags','t');
+        if($addSelect) {
+            $qb->addSelect('t');
         }
         return $qb;
     }

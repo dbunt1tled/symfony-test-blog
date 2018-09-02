@@ -3,8 +3,10 @@
 namespace App\Form\Admin\BlogPost;
 
 use App\Entity\BlogPost;
+use App\Entity\Tag;
 use App\Form\Lib\Type\HiddenDateTimeType;
 use App\Form\Lib\Type\ImageUploadType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -61,6 +63,11 @@ class BlogPostType extends AbstractType
             ])/**/
             ->add('user')
             ->add('category')
+            ->add('tags', EntityType::class, [
+                'class' => Tag::class,
+                'multiple' => true,
+                'expanded' => false,
+            ])
             ->add('status',ChoiceType::class,[
                 'attr' => ['class' => 'statusPost'],
                 'choices' => BlogPost::getStatuses(),

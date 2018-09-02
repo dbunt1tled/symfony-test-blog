@@ -1,0 +1,49 @@
+<RestClientRequest>
+  <option name="biscuits">
+    <list>
+      <Biscuit>
+        <option name="date" value="-1" />
+        <option name="domain" value="symfony.local" />
+        <option name="name" value="sf_redirect" />
+        <option name="path" value="/" />
+        <option name="value" value="%7B%22token%22%3A%22863898%22%2C%22route%22%3A%22app_rest_v1_category_create%22%2C%22method%22%3A%22POST%22%2C%22controller%22%3A%7B%22class%22%3A%22App%5C%5CController%5C%5CRest%5C%5Cv1%5C%5CCategoryController%22%2C%22method%22%3A%22create%22%2C%22file%22%3A%22%5C%2Fvar%5C%2Fwww%5C%2Fsymfony.local%5C%2Fpublic_html%5C%2Fsrc%5C%2FController%5C%2FRest%5C%2Fv1%5C%2FCategoryController.php%22%2C%22line%22%3A37%7D%2C%22status_code%22%3A302%2C%22status_text%22%3A%22Found%22%7D" />
+      </Biscuit>
+    </list>
+  </option>
+  <option name="httpMethod" value="POST" />
+  <option name="urlBase" value="http://symfony.local" />
+  <option name="urlPath" value="api/v1/category" />
+  <option name="headers">
+    <list>
+      <KeyValuePair>
+        <option name="key" value="Accept" />
+        <option name="value" value="*/*" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Cache-Control" />
+        <option name="value" value="no-cache" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Content-Type" />
+        <option name="value" value="application/json" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Accept" />
+        <option name="value" value="application/json" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Authorization" />
+        <option name="value" value="Bearer ZTQxOWU1ODUyMDZmODY2YmFlMmRjZTk2N2Y3NDg1YWM4Njg1MWQ2ZmY1NjcwMDkxOTAzYmIxOTRjNzg3NmFlZQ" />
+      </KeyValuePair>
+    </list>
+  </option>
+  <option name="parameters">
+    <list />
+  </option>
+  <option name="parametersEnabled" value="true" />
+  <option name="haveTextToSend" value="true" />
+  <option name="haveFileToSend" value="false" />
+  <option name="isFileUpload" value="false" />
+  <option name="textToSend" value="{&quot;name&quot;:&quot;YO&quot;, &quot;slug&quot;:&quot;apiSlug&quot;, &quot;status&quot;:&quot;q&quot;,&quot;description&quot;:&quot;apiDescription&quot;}" />
+  <option name="filesToSend" value="" />
+</RestClientRequest>

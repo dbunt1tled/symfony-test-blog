@@ -20,7 +20,7 @@ class FileUploader
         }else{
             $originalName = (string) $nameForFile;
         }
-        $fileName = $this->slug($originalName).'.'.$file->getClientOriginalExtension();
+        $fileName = $this->slug($originalName).'.'.(empty($file->getClientOriginalExtension())?$file->guessExtension():$file->getClientOriginalExtension());
         $file->move($targetDirectory, $fileName);
         return $fileName;
     }

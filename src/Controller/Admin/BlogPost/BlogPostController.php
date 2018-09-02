@@ -38,7 +38,7 @@ class BlogPostController extends Controller
     public function index(Request $request): Response
     {
         $page = (int)$request->query->get('page',1);
-        $postData = $this->blogService->getAllPostPaginator(true,true,true,true,false,$page,Globals::getPaginatorPageSize());
+        $postData = $this->blogService->getAllPostPaginator(true,true,true,true,true,false,$page,Globals::getPaginatorPageSize());
 
         return $this->render('admin/blog_post/index.html.twig', [
             'posts' => $postData['posts'],
@@ -101,10 +101,10 @@ class BlogPostController extends Controller
      */
     public function edit(Request $request, BlogPost $blogPost): Response
     {
-
+        
         $form = $this->createForm(BlogPostType::class, $blogPost);
+        
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $attachment = $blogPost->getUploadedFile();
             if($attachment instanceof UploadedFile) {
@@ -114,6 +114,8 @@ class BlogPostController extends Controller
                 $blogPost->addImage($image);
                 $this->blogService->saveImage($image);
             }
+            $tags = $blogPost->getTags();
+            $blogPost->setTags($tags);
             $this->blogService->savePost($blogPost);
             return $this->redirectToRoute('admin_blog_post_edit', ['id' => $blogPost->getId()]);
         }

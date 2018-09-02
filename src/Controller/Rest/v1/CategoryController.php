@@ -69,8 +69,8 @@ class CategoryController extends FOSRestController implements AuthenticatedContr
         return View::create($result,Response::HTTP_OK)->setFormat('json');
     }
     /**
-     * @Rest\Get("/category/{id}", name="api_category_show")
-     * @ParamConverter("category", class="App\Entity\Category")
+     * @Rest\Get("/category/{category_id}", name="api_category_show")
+     * @ParamConverter("category", class="App\Entity\Category", options={"mapping": {"category_id" : "id"}})
      * @param Category                       $category
      *
      * @return View
@@ -185,8 +185,8 @@ class CategoryController extends FOSRestController implements AuthenticatedContr
     }
     
     /**
-     * @Rest\Delete("/category/{id}", name="api_category_delete")
-     * @ParamConverter("category", class="App\Entity\Category")
+     * @Rest\Delete("/category/{category_id}", name="api_category_delete")
+     * @ParamConverter("category", class="App\Entity\Category", options={"mapping": {"category_id" : "id"}})
      * @param Category                       $category
      *
      * @return View

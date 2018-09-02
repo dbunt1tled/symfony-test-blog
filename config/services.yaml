@@ -10,7 +10,7 @@ parameters:
     images_url_directory: '/images'
     blog_posts_files_directory: '/posts'
     categories_files_directory: '/categories'
-    authors_files_directory: '/users'
+    users_files_directory: '/users'
     paginator_page_size: 20
     main.twig.w_bread_crumb.home.route: home
     main.twig.w_bread_crumb.home.label: Home

@@ -26,6 +26,6 @@ yarn-error.log
 ###< symfony/web-server-bundle ###
 
 .idea/*
-src/DataFixtures/Blog/images/user/
-src/DataFixtures/Blog/images/category/
-src/DataFixtures/Blog/images/post/
+src/DataFixtures/Blog/images/user/tmp/*
+src/DataFixtures/Blog/images/category/tmp/*
+src/DataFixtures/Blog/images/post/tmp/*

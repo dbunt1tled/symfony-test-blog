@@ -78,10 +78,17 @@ class BlogPost
      */
     private $uploadedFile;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="blogPost", cascade={"persist", "merge", "detach"})
+     * @ORM\JoinTable(name="tag_blog_post")
+     */
+    private $tags;
+
     public function __construct()
     {
         $this->status = self::STATUS_DISABLE;
         $this->images = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId()
@@ -257,5 +264,44 @@ class BlogPost
     public function getTargetImageUrl()
     {
         return Globals::getBlogImagesUrl();
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+    
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+            $tag->addBlogPost($this);
+        }
+        
+        return $this;
+    }
+    public function setTags($tags): self
+    {
+       if(!empty($tags)) {
+           foreach ($tags as $tag) {
+               $this->addTag($tag);
+           }
+       }else {
+           $this->tags = new ArrayCollection();
+       }
+        return $this;
+    }
+    
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+            $tag->removeBlogPost($this);
+        }
+
+        return $this;
     }
 }

@@ -37,7 +37,7 @@ class IndexController extends FOSRestController
         $orderBy['createdAt'] = 'ASC';
         $orderBy['id'] = 'ASC';
 
-        /*$postData = $this->blogService->findAllPosts(true,true,true,true,$page,Globals::getPaginatorPageSize());/**/
+        /*$postData = $this->blogService->findAllPosts(true,true,true,true,true,$page,Globals::getPaginatorPageSize());/**/
         $postData = $this->blogService->findOneCategoryBySlug('dr-lavinia-braun');
         dump($postData);
         $serializer = \JMS\Serializer\SerializerBuilder::create()->build();

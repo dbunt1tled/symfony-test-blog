@@ -15,6 +15,12 @@ rest_api_v1:
 auth:
     resource: 'App\Controller\AuthController'
     type: annotation
+tag:
+    resource: 'App\Controller\TagController'
+    type: annotation
+tag_no_page:
+    resource: 'App\Controller\TagController'
+    type: annotation
 index:
     resource: 'App\Controller\HomeController'
     type: annotation
@@ -34,6 +40,9 @@ easy_admin_bundle:
     resource: "@EasyAdminBundle/Controller/AdminController.php"
     type:     annotation
     prefix:   /admin
+blog_post:
+    resource: 'App\Controller\BlogPostController'
+    type: annotation
 #blog_route:
 #    resource: .
 #    type: blog_route

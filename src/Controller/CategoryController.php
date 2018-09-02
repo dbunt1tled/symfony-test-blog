@@ -46,7 +46,7 @@ class CategoryController extends AbstractController
         $orderBy = [];
         $orderBy['createdAt'] = 'ASC';
         $orderBy['id'] = 'ASC';
-        $postData = $this->blogService->getAllPostByCategoryPaginator($category,true,true,true,true,false,$page,Globals::getPaginatorPageSize(),$orderBy);
+        $postData = $this->blogService->getAllPostByCategoryPaginator($category,true,true,true,true,true,false,$page,Globals::getPaginatorPageSize(),$orderBy);
         return $this->render('category/show.html.twig', [
             'posts' => $postData['posts'],
             'totalItems' => $postData['totalItems'],

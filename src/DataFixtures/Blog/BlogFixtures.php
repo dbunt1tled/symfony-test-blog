@@ -8,6 +8,7 @@
 
 namespace App\DataFixtures\Blog;
 
+use App\Entity\Tag;
 use App\Entity\User;
 use App\Entity\BlogPost;
 use App\Entity\Category;
@@ -38,8 +39,11 @@ class BlogFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $countUsers = random_int(10,20);
-        $countCategories = random_int(1,6);
+        $countTags = random_int(10,20);
+        $countCategories = random_int(0,6);
         $this->loaUsers($manager,$countUsers);
+        $manager->flush();
+        $this->loadTags($manager,$countTags);
         $manager->flush();
         $this->loadCategories($manager,$countCategories);
         $manager->flush();
@@ -142,12 +146,23 @@ class BlogFixtures extends Fixture
             }
         }
     }
+    private function loadTags(ObjectManager $manager,$countTags)
+    {
+        for($i = 0; $i < $countTags; $i++ ) {
+            $tag = new Tag();
+            $tag->setName($this->faker->unique()->colorName);
+            $manager->persist($tag);
+        }
+    }
     private function loadBlogPosts(ObjectManager $manager)
     {
 
         $userRepository = $manager->getRepository('App:User');
         $categoryRepository = $manager->getRepository('App:Category');
+        $tagRepository = $manager->getRepository('App:Tag');
         $usersIds = $userRepository->getAllIds();
+        $tagsIds = $tagRepository->getAllIds();
+        dump($tagsIds);
         $categoriesIds = $categoryRepository->getAllIds();
         for ($i = 0; $i < 30; $i++) {
             $userId = array_rand($usersIds, 1);
@@ -176,6 +191,9 @@ class BlogFixtures extends Fixture
                 $file = new UploadedFile($fileDest, 'Image'.$i.'-'.$j, null, null, null, true);
                 $image->setFile($file);
                 $manager->persist($image);
+    
+                $randTags = array_rand(array_flip($tagsIds), random_int(2,count($tagsIds)-1));
+                $tags = $tagRepository->findByIds($randTags);
 
                 $blogPost->setName($name)
                          ->setDescription($this->faker->text(600))
@@ -184,6 +202,11 @@ class BlogFixtures extends Fixture
                          ->setStatus(BlogPost::STATUS_ACTIVE)
                          ->setUser($user)
                          ->addImage($image);
+                if(!empty($tags)){
+                    foreach ($tags as $tag) {
+                        $blogPost->addTag($tag);
+                    }
+                }
                 $manager->persist($blogPost);
             }
         }
